@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">Blog | FreshBite</title>
+  <meta name="description" id="pageDesc" content="FreshBite healthy living blog" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--forest:#1c3a2a;--leaf:#2d6a4f;--lime:#74c69d;--mint:#b7e4c7;--cream:#f8f4ef;--cream-2:#f0ebe3;--charcoal:#1a1a1a;--muted:#6b7280;--white:#ffffff;--bg:var(--cream);--bg-2:var(--cream-2);--text:var(--charcoal);--text-sub:var(--muted);--border:rgba(28,58,42,0.12);--card-bg:var(--white);--nav-bg:rgba(248,244,239,0.9);--font-display:'Cormorant Garamond',serif;--font-body:'DM Sans',sans-serif;--r-sm:8px;--r-md:16px;--r-lg:24px;--r-xl:40px;--shadow-md:0 4px 20px rgba(28,58,42,0.12);--shadow-lg:0 12px 48px rgba(28,58,42,0.16);--transition:0.3s cubic-bezier(0.4,0,0.2,1)}
+    [data-theme="dark"]{--bg:#0d1f16;--bg-2:#111e18;--text:#e8f5ed;--text-sub:#8dab97;--border:rgba(116,198,157,0.15);--card-bg:#162318;--nav-bg:rgba(13,31,22,0.92)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background var(--transition),color var(--transition)}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font-family:var(--font-body)}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;padding:0 32px}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;font-weight:600;color:var(--forest)}
+    [data-theme="dark"] .nav-logo{color:var(--lime)}
+    .nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--leaf),var(--lime));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{font-size:0.875rem;font-weight:500;color:var(--text-sub);transition:color var(--transition)}
+    .nav-links a:hover{color:var(--text)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:100px;font-size:0.875rem;font-weight:500;border:none;transition:all var(--transition);cursor:pointer}
+    .btn-primary{background:var(--forest);color:white}
+    .btn-outline{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+    [data-theme="dark"] .btn-outline{color:var(--lime);border-color:var(--lime)}
+    .theme-toggle{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all var(--transition);color:var(--text)}
+    @media(max-width:768px){.nav-links{display:none}}
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 24px}
+
+    .post-hero{padding:100px 0 0;background:var(--forest);position:relative;overflow:hidden}
+    .post-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 70% 30%,rgba(116,198,157,0.15),transparent),linear-gradient(160deg,#0a1f14,#1c3a2a)}
+    .post-hero-inner{position:relative;z-index:1;max-width:760px}
+    .breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:16px}
+    .breadcrumb a{color:rgba(255,255,255,0.4);transition:color var(--transition)}
+    .breadcrumb a:hover{color:var(--lime)}
+    .post-category{font-size:0.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--lime);margin-bottom:12px}
+    .post-hero-title{font-family:var(--font-display);font-size:clamp(2.2rem,5vw,4.5rem);font-weight:300;color:white;line-height:1.08;margin-bottom:20px}
+    .post-hero-excerpt{color:rgba(255,255,255,0.55);font-size:1rem;line-height:1.7;margin-bottom:24px}
+    .post-meta{display:flex;align-items:center;gap:16px;font-size:0.82rem;color:rgba(255,255,255,0.45);padding-bottom:40px}
+    .author-chip{display:flex;align-items:center;gap:8px}
+    .author-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--leaf),var(--lime));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.8rem}
+
+    .post-content{padding:56px 0 80px}
+    .post-layout{display:grid;grid-template-columns:1fr 300px;gap:48px;align-items:start}
+    @media(max-width:1024px){.post-layout{grid-template-columns:1fr}}
+
+    .post-body{max-width:680px}
+    .post-body h2{font-family:var(--font-display);font-size:1.8rem;font-weight:400;margin:32px 0 14px;color:var(--text)}
+    .post-body h3{font-size:1.1rem;font-weight:600;margin:24px 0 10px}
+    .post-body p{font-size:0.95rem;color:var(--text-sub);line-height:1.8;margin-bottom:16px}
+    .post-body ul,.post-body ol{padding-left:20px;margin-bottom:16px}
+    .post-body li{font-size:0.95rem;color:var(--text-sub);line-height:1.8;margin-bottom:6px}
+    .post-body ul li{list-style:disc}
+    .post-body ol li{list-style:decimal}
+    .post-body strong{color:var(--text);font-weight:600}
+    .callout{background:rgba(116,198,157,0.1);border-left:4px solid var(--lime);border-radius:0 var(--r-md) var(--r-md) 0;padding:16px 20px;margin:20px 0}
+    .callout p{margin:0;color:var(--leaf);font-weight:500}
+    .post-img-placeholder{width:100%;height:300px;background:linear-gradient(135deg,var(--bg-2),var(--mint));border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:8rem;margin:24px 0;border:1px solid var(--border)}
+    .key-points{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin:24px 0}
+    .key-points-title{font-size:0.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--leaf);margin-bottom:14px}
+    .key-point{display:flex;gap:10px;margin-bottom:10px;font-size:0.875rem;color:var(--text-sub)}
+    .key-point::before{content:'✓';color:var(--lime);font-weight:700;flex-shrink:0}
+
+    /* Tags & Share */
+    .post-tags{display:flex;gap:8px;flex-wrap:wrap;margin:32px 0}
+    .post-tag{padding:5px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:100px;font-size:0.75rem;color:var(--text-sub)}
+    .share-section{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;text-align:center;margin:24px 0}
+    .share-title{font-family:var(--font-display);font-size:1.4rem;margin-bottom:12px}
+    .share-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .share-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:100px;font-size:0.8rem;font-weight:500;border:1.5px solid var(--border);background:transparent;color:var(--text);cursor:pointer;transition:all var(--transition)}
+    .share-btn:hover{border-color:var(--lime)}
+    .share-btn.pinterest{background:#e60023;border-color:#e60023;color:white}
+
+    /* Author card */
+    .author-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;display:flex;gap:16px;margin:24px 0}
+    .author-big-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--leaf),var(--lime));display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;font-weight:700;flex-shrink:0}
+    .author-name{font-weight:600;margin-bottom:4px}
+    .author-title{font-size:0.8rem;color:var(--lime);margin-bottom:8px}
+    .author-bio{font-size:0.82rem;color:var(--text-sub);line-height:1.6}
+
+    /* Sidebar */
+    .post-sidebar{position:sticky;top:90px}
+    .sidebar-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;margin-bottom:20px}
+    .sidebar-title{font-size:0.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-sub);margin-bottom:14px}
+    .progress-bar{height:3px;background:var(--bg-2);border-radius:2px;margin-bottom:20px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--leaf),var(--lime));border-radius:2px;transition:width 0.1s linear;width:0%}
+    .toc-list{display:flex;flex-direction:column;gap:6px}
+    .toc-item{font-size:0.82rem;color:var(--text-sub);padding:6px 0 6px 12px;border-left:2px solid var(--border);cursor:pointer;transition:all var(--transition)}
+    .toc-item:hover{color:var(--leaf);border-color:var(--lime)}
+    .related-mini{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:color var(--transition)}
+    .related-mini:last-child{border-bottom:none}
+    .related-mini:hover{color:var(--leaf)}
+    .related-mini-emoji{font-size:1.4rem;flex-shrink:0}
+    .related-mini-title{font-size:0.8rem;font-weight:500;line-height:1.4}
+    .ad-box{background:var(--bg-2);border:1px dashed var(--border);border-radius:var(--r-md);padding:20px;text-align:center;font-size:0.75rem;color:var(--text-sub)}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><div class="nav-logo-icon">🌿</div>FreshBite</a>
+      <ul class="nav-links">
+        <li><a href="/recipes/">Recipes</a></li>
+        <li><a href="/juice-builder/">Juice Lab</a></li>
+        <li><a href="/blog/" style="color:var(--leaf)">Blog</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+        <a href="/auth/login.html" class="btn btn-primary">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="postContent"></div>
+
+  <script>
+    const POSTS_DB = {
+      1:{
+        id:1,emoji:'🥗',cat:'Nutrition Science',
+        title:'The Complete Guide to Anti-Inflammatory Eating in 2026',
+        excerpt:'Chronic inflammation is linked to nearly every major disease. But the foods you eat every day can dramatically reduce it.',
+        author:{name:'Dr. Nadia Osei',title:'Registered Dietitian, PhD',avatar:'N',bio:'Dr. Nadia Osei is a registered dietitian and nutrition researcher with 15 years of clinical experience. She specializes in using food as medicine.'},
+        date:'March 14, 2026',readTime:8,
+        tags:['antiinflammatory','nutrition','health','wholefood'],
+        toc:['What is Inflammation?','The 10 Best Anti-Inflammatory Foods','Foods to Avoid','7-Day Meal Plan','Key Takeaways'],
+        content:`
+          <h2>What is Inflammation?</h2>
+          <p>Inflammation is your immune system's natural response to injury or infection. In the short term, it's protective and essential. But <strong>chronic low-grade inflammation</strong> — the kind that smolders silently for years — is now recognized as a root cause of heart disease, diabetes, Alzheimer's, and even depression.</p>
+          <div class="callout"><p>💡 Research published in Nature Medicine found that chronic inflammation underlies over 50% of all deaths worldwide from ischemic heart disease, stroke, cancer, diabetes, and kidney disease.</p></div>
+          <p>The remarkable news? Diet is one of the most powerful tools we have to modulate inflammatory pathways. What you put on your plate every day can either fan the flames or cool them down.</p>
+          <div class="post-img-placeholder">🥗</div>
+
+          <h2>The 10 Best Anti-Inflammatory Foods</h2>
+          <p>These foods have the strongest evidence base for reducing inflammatory biomarkers like CRP, IL-6, and TNF-alpha:</p>
+          <ul>
+            <li><strong>Extra Virgin Olive Oil</strong> — Contains oleocanthal, which works similarly to ibuprofen at the molecular level.</li>
+            <li><strong>Fatty Fish (Salmon, Sardines, Mackerel)</strong> — Omega-3 fatty acids EPA and DHA directly inhibit the production of inflammatory cytokines.</li>
+            <li><strong>Leafy Greens (Kale, Spinach, Swiss Chard)</strong> — Rich in antioxidants, vitamin K, and polyphenols that neutralize free radicals.</li>
+            <li><strong>Berries</strong> — Anthocyanins in blueberries and strawberries have been shown to reduce markers of inflammation by up to 25%.</li>
+            <li><strong>Turmeric</strong> — Curcumin, its active compound, inhibits NF-κB, a key regulator of the inflammatory response.</li>
+            <li><strong>Ginger</strong> — Gingerols and shogaols inhibit multiple inflammatory pathways simultaneously.</li>
+            <li><strong>Nuts (especially Walnuts)</strong> — High in polyphenols and omega-3 ALA, with robust evidence for cardiovascular protection.</li>
+            <li><strong>Dark Chocolate (70%+)</strong> — Flavanols improve endothelial function and reduce oxidative stress.</li>
+            <li><strong>Green Tea</strong> — EGCG (epigallocatechin gallate) is one of the most potent anti-inflammatory compounds in nature.</li>
+            <li><strong>Tomatoes</strong> — Lycopene, especially when cooked, has strong anti-inflammatory effects.</li>
+          </ul>
+
+          <div class="key-points">
+            <div class="key-points-title">Quick Reference</div>
+            <div class="key-point">Eat the rainbow — different colored plants have different anti-inflammatory compounds.</div>
+            <div class="key-point">Aim for 2-3 servings of fatty fish per week for optimal omega-3 levels.</div>
+            <div class="key-point">Extra virgin olive oil should be your primary cooking fat.</div>
+            <div class="key-point">Minimize processed foods, refined sugars, and vegetable oils high in omega-6.</div>
+          </div>
+
+          <h2>Foods to Avoid</h2>
+          <p>Just as important as what you eat is what you limit. These foods consistently drive inflammatory pathways:</p>
+          <ul>
+            <li><strong>Refined Carbohydrates</strong> — White bread, pastries, and processed cereals spike blood sugar and insulin, triggering inflammation.</li>
+            <li><strong>Processed Meats</strong> — Bacon, hot dogs, and deli meats contain advanced glycation end products (AGEs) and nitrates.</li>
+            <li><strong>Industrial Seed Oils</strong> — Soybean, corn, and sunflower oil are extremely high in omega-6 fatty acids, which compete with anti-inflammatory omega-3s.</li>
+            <li><strong>Excess Alcohol</strong> — Disrupts the gut microbiome and increases intestinal permeability ("leaky gut"), allowing inflammatory compounds into the bloodstream.</li>
+          </ul>
+
+          <h2>7-Day Meal Plan</h2>
+          <p>Here's a practical week of anti-inflammatory eating. Every meal is designed around the principles above:</p>
+          <p><strong>Day 1:</strong> Overnight oats with berries + Salmon salad with olive oil + Lentil soup with turmeric + Handful of walnuts</p>
+          <p><strong>Day 2:</strong> Green smoothie with spinach + Buddha bowl with chickpeas + Grilled mackerel + Dark chocolate square</p>
+          <p><strong>Day 3:</strong> Avocado toast with cherry tomatoes + Mediterranean salad + Ginger stir-fry with tofu + Green tea</p>
+          <p>…and so on through Day 7, rotating through the top anti-inflammatory foods listed above. The key is variety — different plants provide different phytonutrients.</p>
+
+          <h2>Key Takeaways</h2>
+          <p>Anti-inflammatory eating doesn't need to be complicated. Focus on the following core principles:</p>
+          <ol>
+            <li>Build every meal around plants — aim for 5-9 servings of vegetables and fruits daily.</li>
+            <li>Include fatty fish 2-3 times per week.</li>
+            <li>Use olive oil as your primary fat.</li>
+            <li>Add turmeric and ginger to cooking regularly.</li>
+            <li>Minimize ultra-processed foods, refined sugars, and seed oils.</li>
+            <li>Don't forget sleep and stress management — they directly modulate inflammation too.</li>
+          </ol>
+          <div class="callout"><p>🌱 Small, consistent changes matter more than perfection. Aim to improve one meal at a time.</p></div>
+        `
+      },
+    };
+
+    const urlId = +new URLSearchParams(window.location.search).get('id') || 1;
+    const post = POSTS_DB[urlId] || POSTS_DB[1];
+
+    document.getElementById('pageTitle').textContent = post.title + ' | FreshBite Blog';
+    document.getElementById('pageDesc').textContent = post.excerpt;
+
+    // Schema.org Article
+    const schema = {
+      "@context":"https://schema.org","@type":"Article",
+      "headline":post.title,"description":post.excerpt,
+      "author":{"@type":"Person","name":post.author.name},
+      "publisher":{"@type":"Organization","name":"FreshBite"},
+      "datePublished":post.date
+    };
+    const schemaEl = document.createElement('script');
+    schemaEl.type = 'application/ld+json';
+    schemaEl.textContent = JSON.stringify(schema);
+    document.head.appendChild(schemaEl);
+
+    document.getElementById('postContent').innerHTML = `
+      <!-- HERO -->
+      <div class="post-hero">
+        <div class="post-hero-bg"></div>
+        <div class="container">
+          <div class="post-hero-inner">
+            <div class="breadcrumb">
+              <a href="/">Home</a> <span>/</span>
+              <a href="/blog/">Blog</a> <span>/</span>
+              <span style="color:rgba(255,255,255,0.7)">${post.cat}</span>
+            </div>
+            <div class="post-category">${post.cat}</div>
+            <h1 class="post-hero-title">${post.title}</h1>
+            <p class="post-hero-excerpt">${post.excerpt}</p>
+            <div class="post-meta">
+              <div class="author-chip">
+                <div class="author-avatar">${post.author.avatar}</div>
+                <span>${post.author.name}</span>
+              </div>
+              <span>·</span>
+              <span>${post.date}</span>
+              <span>·</span>
+              <span>⏱ ${post.readTime} min read</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="post-content">
+        <div class="container">
+          <div class="post-layout">
+            <div>
+              <!-- Reading progress -->
+              <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+              
+              <div class="post-body" id="postBody">${post.content}</div>
+
+              <!-- Tags -->
+              <div class="post-tags">
+                ${post.tags.map(t => `<span class="post-tag">#${t}</span>`).join('')}
+              </div>
+
+              <!-- Share -->
+              <div class="share-section">
+                <div class="share-title">Found this helpful?</div>
+                <p style="font-size:0.85rem;color:var(--text-sub);margin-bottom:16px">Share it with someone who needs to read this.</p>
+                <div class="share-btns">
+                  <button class="share-btn pinterest" onclick="sharePost('pinterest')">📌 Pin It</button>
+                  <button class="share-btn" onclick="sharePost('twitter')">🐦 Tweet</button>
+                  <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+                </div>
+              </div>
+
+              <!-- Author Card -->
+              <div class="author-card">
+                <div class="author-big-avatar">${post.author.avatar}</div>
+                <div>
+                  <div class="author-name">${post.author.name}</div>
+                  <div class="author-title">${post.author.title}</div>
+                  <div class="author-bio">${post.author.bio}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <aside class="post-sidebar">
+              <div class="sidebar-card">
+                <div class="sidebar-title">Table of Contents</div>
+                <div class="toc-list">
+                  ${post.toc.map(item => `<div class="toc-item" onclick="scrollToHeading('${item}')">${item}</div>`).join('')}
+                </div>
+              </div>
+              <div class="sidebar-card">
+                <div class="sidebar-title">Related Articles</div>
+                <div class="topic-list">
+                  <div class="related-mini" onclick="window.location='/blog/post.html?id=2'">
+                    <span class="related-mini-emoji">🫙</span>
+                    <div class="related-mini-title">Meal Prep in 2 Hours: The Ultimate Sunday Guide</div>
+                  </div>
+                  <div class="related-mini" onclick="window.location='/blog/post.html?id=3'">
+                    <span class="related-mini-emoji">🌿</span>
+                    <div class="related-mini-title">10 High-Protein Vegan Foods That Actually Taste Amazing</div>
+                  </div>
+                  <div class="related-mini" onclick="window.location='/blog/post.html?id=5'">
+                    <span class="related-mini-emoji">🧠</span>
+                    <div class="related-mini-title">The Gut-Brain Connection</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ad-box">
+                <div style="font-size:0.65rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Advertisement</div>
+                <div style="font-weight:600">300 × 250</div>
+                <div>Medium Rectangle</div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Reading progress
+    window.addEventListener('scroll', () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = Math.min(window.scrollY / docHeight * 100, 100);
+      const el = document.getElementById('progressFill');
+      if (el) el.style.width = pct + '%';
+    });
+
+    function scrollToHeading(text) {
+      const headings = document.querySelectorAll('#postBody h2, #postBody h3');
+      for (const h of headings) {
+        if (h.textContent.includes(text.slice(0,15))) {
+          h.scrollIntoView({behavior:'smooth', block:'start'});
+          break;
+        }
+      }
+    }
+
+    function sharePost(platform) {
+      const url = encodeURIComponent(window.location.href);
+      const title = encodeURIComponent(post.title);
+      if (platform === 'pinterest') window.open(`https://pinterest.com/pin/create/button/?url=${url}&description=${title}`);
+      if (platform === 'twitter') window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`);
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => alert('Link copied!'));
+    }
+
+    // Dark mode
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('fb_theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    const tt = document.getElementById('themeToggle');
+    tt.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    tt.addEventListener('click', () => {
+      const n = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', n);
+      tt.textContent = n === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('fb_theme', n);
+    });
+  </script>
+</body>
+</html>

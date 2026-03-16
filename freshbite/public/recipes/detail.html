@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Recipe | FreshBite</title>
+  <meta name="description" id="page-desc" content="Healthy recipe with full nutrition facts, ingredients, and step-by-step instructions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--forest:#1c3a2a;--leaf:#2d6a4f;--lime:#74c69d;--mint:#b7e4c7;--cream:#f8f4ef;--cream-2:#f0ebe3;--charcoal:#1a1a1a;--muted:#6b7280;--white:#ffffff;--bg:var(--cream);--bg-2:var(--cream-2);--text:var(--charcoal);--text-sub:var(--muted);--border:rgba(28,58,42,0.12);--card-bg:var(--white);--nav-bg:rgba(248,244,239,0.9);--font-display:'Cormorant Garamond',serif;--font-body:'DM Sans',sans-serif;--r-sm:8px;--r-md:16px;--r-lg:24px;--shadow-md:0 4px 20px rgba(28,58,42,0.12);--shadow-lg:0 12px 48px rgba(28,58,42,0.16);--transition:0.3s cubic-bezier(0.4,0,0.2,1)}
+    [data-theme="dark"]{--bg:#0d1f16;--bg-2:#111e18;--text:#e8f5ed;--text-sub:#8dab97;--border:rgba(116,198,157,0.15);--card-bg:#162318;--nav-bg:rgba(13,31,22,0.92)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background var(--transition),color var(--transition)}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font-family:var(--font-body)}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;padding:0 32px}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;font-weight:600;color:var(--forest)}
+    [data-theme="dark"] .nav-logo{color:var(--lime)}
+    .nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--leaf),var(--lime));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{font-size:0.875rem;font-weight:500;color:var(--text-sub);transition:color var(--transition)}
+    .nav-links a:hover{color:var(--text)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:100px;font-size:0.875rem;font-weight:500;border:none;transition:all var(--transition);cursor:pointer}
+    .btn-primary{background:var(--forest);color:white}
+    .btn-primary:hover{background:var(--leaf)}
+    .btn-lime{background:var(--lime);color:var(--forest);font-weight:600}
+    .btn-lime:hover{background:var(--mint)}
+    .btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+    .btn-outline:hover{border-color:var(--lime)}
+    .theme-toggle{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all var(--transition);color:var(--text)}
+    @media(max-width:768px){.nav-links{display:none}}
+    .container{width:100%;max-width:1100px;margin:0 auto;padding:0 24px}
+
+    /* HERO */
+    .recipe-hero{padding:100px 0 0;background:var(--forest);position:relative;overflow:hidden;margin-bottom:0}
+    .recipe-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 80% 40%,rgba(45,106,79,0.5),transparent),linear-gradient(135deg,#0a1f14,#1c3a2a)}
+    .recipe-hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:end;padding-bottom:0}
+    @media(max-width:900px){.recipe-hero-inner{grid-template-columns:1fr}}
+    .breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:16px}
+    .breadcrumb a{color:rgba(255,255,255,0.45);transition:color var(--transition)}
+    .breadcrumb a:hover{color:var(--lime)}
+    .recipe-category-badge{display:inline-block;background:rgba(116,198,157,0.2);border:1px solid rgba(116,198,157,0.3);color:var(--lime);font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px}
+    .recipe-hero-title{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,5rem);font-weight:300;color:white;line-height:1.05;margin-bottom:20px}
+    .recipe-hero-desc{color:rgba(255,255,255,0.6);font-size:1rem;max-width:520px;line-height:1.7;margin-bottom:24px}
+    .recipe-quick-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:32px}
+    .quick-stat{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-md);padding:12px 18px;backdrop-filter:blur(8px)}
+    .quick-stat-num{font-family:var(--font-display);font-size:1.5rem;color:var(--lime)}
+    .quick-stat-label{font-size:0.7rem;color:rgba(255,255,255,0.5);margin-top:2px}
+    .recipe-actions{display:flex;gap:12px;flex-wrap:wrap;padding-bottom:40px}
+    .recipe-hero-visual{display:flex;align-items:flex-end;padding-bottom:0}
+    .recipe-hero-img{width:100%;height:340px;background:linear-gradient(135deg,rgba(116,198,157,0.15),rgba(45,106,79,0.2));border-radius:var(--r-lg) var(--r-lg) 0 0;display:flex;align-items:center;justify-content:center;font-size:9rem;border:1px solid rgba(116,198,157,0.15)}
+    @media(max-width:900px){.recipe-hero-visual{display:none}}
+
+    /* CONTENT */
+    .recipe-content{padding:48px 0 80px}
+    .recipe-layout{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start}
+    @media(max-width:900px){.recipe-layout{grid-template-columns:1fr}}
+
+    .recipe-main{}
+    .section-block{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:32px;margin-bottom:24px}
+    .section-block-title{font-family:var(--font-display);font-size:1.6rem;font-weight:500;margin-bottom:20px;color:var(--text)}
+    .section-block-title span{color:var(--leaf)}
+    
+    /* Ingredients */
+    .servings-control{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:12px 16px;background:var(--bg-2);border-radius:var(--r-md)}
+    .servings-label{font-size:0.875rem;color:var(--text-sub)}
+    .servings-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:var(--card-bg);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition)}
+    .servings-btn:hover{border-color:var(--lime);background:var(--bg-2)}
+    .servings-num{font-family:var(--font-display);font-size:1.5rem;min-width:32px;text-align:center;color:var(--leaf)}
+    
+    .ingredient-list{display:flex;flex-direction:column;gap:0}
+    .ingredient-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all var(--transition)}
+    .ingredient-item:last-child{border-bottom:none}
+    .ingredient-item:hover{padding-left:4px}
+    .ingredient-check{width:20px;height:20px;border-radius:4px;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--transition)}
+    .ingredient-item.checked .ingredient-check{background:var(--leaf);border-color:var(--leaf);color:white;font-size:12px}
+    .ingredient-item.checked .ingredient-text{text-decoration:line-through;color:var(--text-sub)}
+    .ingredient-amount{font-weight:600;font-size:0.875rem;min-width:60px;color:var(--leaf)}
+    .ingredient-text{font-size:0.875rem;color:var(--text)}
+    .ingredient-note{font-size:0.75rem;color:var(--text-sub);font-style:italic}
+
+    /* Steps */
+    .steps-list{display:flex;flex-direction:column;gap:24px}
+    .step-item{display:flex;gap:20px;padding:0}
+    .step-num{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--leaf),var(--lime));color:white;font-family:var(--font-display);font-size:1.2rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+    .step-body{}
+    .step-title{font-weight:600;font-size:0.9rem;color:var(--text);margin-bottom:6px}
+    .step-desc{font-size:0.875rem;color:var(--text-sub);line-height:1.7}
+    .step-tip{background:rgba(116,198,157,0.1);border-left:3px solid var(--lime);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:10px 14px;margin-top:10px;font-size:0.8rem;color:var(--leaf)}
+
+    /* Timer */
+    .cooking-timer{background:linear-gradient(135deg,var(--forest),#0a2218);border-radius:var(--r-lg);padding:24px;text-align:center;margin-bottom:24px}
+    .timer-display{font-family:var(--font-display);font-size:4rem;color:var(--lime);line-height:1;margin:12px 0}
+    .timer-label{font-size:0.75rem;color:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase}
+    .timer-controls{display:flex;gap:10px;justify-content:center;margin-top:16px}
+    .timer-btn{padding:10px 20px;border-radius:100px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;transition:all var(--transition)}
+    .timer-start{background:var(--lime);color:var(--forest)}
+    .timer-reset{background:rgba(255,255,255,0.1);color:white}
+    .timer-select{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r-sm);padding:8px 12px;color:white;font-family:var(--font-body);font-size:0.85rem;outline:none}
+
+    /* Nutrition */
+    .nutrition-table{width:100%}
+    .nutrition-header{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:3px solid var(--border);margin-bottom:8px}
+    .nutrition-header h3{font-family:var(--font-display);font-size:1.4rem}
+    .nutrition-serving{font-size:0.8rem;color:var(--text-sub)}
+    .nutrition-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.875rem}
+    .nutrition-row:last-child{border-bottom:none}
+    .nutrition-row.main{font-weight:600}
+    .nutrition-row.sub{padding-left:16px;font-size:0.82rem;color:var(--text-sub)}
+    .nutrition-dv{color:var(--text-sub);font-size:0.8rem}
+    .nutrition-bar-wrap{margin-top:20px}
+    .macro-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .macro-label{font-size:0.8rem;min-width:80px}
+    .macro-track{flex:1;height:6px;background:var(--bg-2);border-radius:3px;overflow:hidden}
+    .macro-fill{height:100%;border-radius:3px;transition:width 1s ease}
+    .macro-value{font-size:0.8rem;min-width:40px;text-align:right;color:var(--text-sub)}
+
+    /* Rating */
+    .rating-section{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px;margin-bottom:24px}
+    .rating-avg{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+    .rating-big{font-family:var(--font-display);font-size:4rem;color:var(--text);line-height:1}
+    .rating-stars{font-size:1.5rem;color:#f59e0b;letter-spacing:-2px}
+    .rating-count{font-size:0.85rem;color:var(--text-sub)}
+    .rating-bars{display:flex;flex-direction:column;gap:6px}
+    .rating-bar-row{display:flex;align-items:center;gap:10px;font-size:0.8rem}
+    .rating-bar-track{flex:1;height:6px;background:var(--bg-2);border-radius:3px;overflow:hidden}
+    .rating-bar-fill{height:100%;background:linear-gradient(90deg,var(--leaf),var(--lime));border-radius:3px}
+    .user-rating{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+    .user-rating-title{font-size:0.9rem;font-weight:600;margin-bottom:10px}
+    .star-picker{display:flex;gap:6px;font-size:1.8rem;cursor:pointer;margin-bottom:12px}
+    .star-picker span{transition:transform var(--transition);user-select:none}
+    .star-picker span:hover{transform:scale(1.2)}
+
+    /* Sidebar */
+    .recipe-sidebar{}
+    .sidebar-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-bottom:20px}
+    .sidebar-title{font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-sub);margin-bottom:16px}
+    
+    .share-row{display:flex;gap:8px;flex-wrap:wrap}
+    .share-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:100px;font-size:0.8rem;font-weight:500;border:1.5px solid var(--border);background:transparent;color:var(--text);cursor:pointer;transition:all var(--transition);flex:1;justify-content:center}
+    .share-btn:hover{border-color:var(--lime)}
+    .share-btn.pinterest{background:#e60023;border-color:#e60023;color:white}
+    .share-btn.pinterest:hover{background:#c0001d}
+
+    .tags-wrap{display:flex;gap:8px;flex-wrap:wrap}
+    .tag-chip{padding:5px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:100px;font-size:0.75rem;color:var(--text-sub);transition:all var(--transition);cursor:pointer}
+    .tag-chip:hover{border-color:var(--lime);color:var(--leaf)}
+
+    .tips-list{display:flex;flex-direction:column;gap:10px}
+    .tip-item{display:flex;gap:10px;align-items:flex-start;font-size:0.85rem;color:var(--text-sub);line-height:1.5}
+    .tip-icon{font-size:1rem;flex-shrink:0;margin-top:2px}
+
+    .ad-rect{background:var(--bg-2);border:1px dashed var(--border);border-radius:var(--r-md);padding:24px;text-align:center;font-size:0.75rem;color:var(--text-sub)}
+    
+    /* PDF gate modal */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--card-bg);border-radius:var(--r-xl);padding:40px;max-width:440px;width:90%;text-align:center}
+    .modal-icon{font-size:3rem;margin-bottom:16px}
+    .modal-title{font-family:var(--font-display);font-size:2rem;margin-bottom:10px}
+    .modal-desc{font-size:0.9rem;color:var(--text-sub);line-height:1.6;margin-bottom:24px}
+    .modal-actions{display:flex;flex-direction:column;gap:10px}
+
+    /* Comments */
+    .comment{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--border)}
+    .comment:last-child{border-bottom:none}
+    .comment-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--leaf),var(--lime));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1rem;flex-shrink:0}
+    .comment-body{}
+    .comment-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .comment-name{font-weight:600;font-size:0.875rem}
+    .comment-date{font-size:0.75rem;color:var(--text-sub)}
+    .comment-text{font-size:0.875rem;color:var(--text-sub);line-height:1.6}
+    .comment-form{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+    .comment-input{width:100%;padding:12px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-md);font-family:var(--font-body);font-size:0.875rem;color:var(--text);outline:none;margin-bottom:10px;resize:vertical;min-height:80px;transition:border-color var(--transition)}
+    .comment-input:focus{border-color:var(--lime)}
+
+    .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+    @media(max-width:640px){.related-grid{grid-template-columns:1fr 1fr}}
+    .related-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;cursor:pointer;transition:all var(--transition)}
+    .related-card:hover{transform:translateY(-2px);border-color:var(--lime)}
+    .related-img{height:100px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:var(--bg-2)}
+    .related-title{font-family:var(--font-display);font-size:0.95rem;font-weight:500;padding:10px 12px;color:var(--text)}
+    .related-info{padding:0 12px 10px;font-size:0.75rem;color:var(--text-sub)}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><div class="nav-logo-icon">🌿</div>FreshBite</a>
+      <ul class="nav-links">
+        <li><a href="/recipes/" style="color:var(--leaf)">Recipes</a></li>
+        <li><a href="/juice-builder/">Juice Lab</a></li>
+        <li><a href="/blog/">Blog</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+        <a href="/auth/login.html" class="btn btn-primary">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- DYNAMIC CONTENT -->
+  <div id="recipeContent"></div>
+
+  <!-- PDF DOWNLOAD MODAL -->
+  <div class="modal-overlay" id="pdfModal">
+    <div class="modal">
+      <div class="modal-icon">📥</div>
+      <h2 class="modal-title">Download PDF Guide</h2>
+      <p class="modal-desc">Create a free FreshBite account to download this recipe as a beautiful printable PDF guide — completely free!</p>
+      <div class="modal-actions">
+        <a href="/auth/signup.html" class="btn btn-lime" style="justify-content:center;padding:14px">🌿 Create Free Account</a>
+        <a href="/auth/login.html" class="btn btn-outline" style="justify-content:center;padding:14px">Sign In</a>
+        <button onclick="closePdfModal()" style="background:none;border:none;font-size:0.85rem;color:var(--text-sub);padding:8px">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RECIPES_DB = {
+      1:{id:1,title:"Green Goddess Buddha Bowl",cat:"healthy",emoji:"🥗",time:"20 min",prepTime:"10 min",cookTime:"10 min",difficulty:"easy",cal:380,protein:18,carbs:52,fat:14,fiber:12,sugar:8,sodium:320,rating:4.9,reviews:234,servings:2,desc:"A vibrant, nourishing bowl bursting with color, texture, and plant-based protein. This recipe is a celebration of everything fresh and green.",
+        tags:["vegan","gluten-free","meal-prep"],
+        ingredients:[
+          {amount:"1 cup",name:"quinoa, cooked",note:""},
+          {amount:"2 cups",name:"baby spinach",note:""},
+          {amount:"1 can",name:"chickpeas, rinsed",note:"400g / 14oz"},
+          {amount:"1",name:"avocado, sliced",note:"ripe"},
+          {amount:"1 cup",name:"cucumber, diced",note:""},
+          {amount:"½ cup",name:"cherry tomatoes, halved",note:""},
+          {amount:"¼ cup",name:"tahini",note:""},
+          {amount:"2 tbsp",name:"lemon juice",note:"freshly squeezed"},
+          {amount:"1 clove",name:"garlic, minced",note:""},
+          {amount:"2 tbsp",name:"olive oil",note:"extra virgin"},
+          {amount:"1 tsp",name:"smoked paprika",note:""},
+          {amount:"Salt & pepper",name:"to taste",note:""},
+        ],
+        steps:[
+          {title:"Roast Chickpeas",desc:"Preheat oven to 200°C / 400°F. Drain and dry chickpeas. Toss with olive oil, smoked paprika, salt, and pepper. Spread on baking sheet and roast 20-25 min until crispy.",tip:"Shake halfway through for even crispiness."},
+          {title:"Make Tahini Dressing",desc:"Whisk together tahini, lemon juice, minced garlic, and 3-4 tablespoons of water until smooth and creamy. Season with salt.",tip:"Add water gradually to reach your desired consistency."},
+          {title:"Prep Vegetables",desc:"Dice cucumber, halve cherry tomatoes, and slice avocado. Have all vegetables at room temperature for best flavor."},
+          {title:"Assemble Bowl",desc:"Place quinoa as the base. Arrange spinach, cucumber, tomatoes, and avocado around the bowl. Top with crispy chickpeas.",tip:"Arrange colorfully for the best visual appeal and Instagram shot!"},
+          {title:"Dress & Serve",desc:"Drizzle tahini dressing generously over the top. Add a squeeze of fresh lemon. Serve immediately."},
+        ],
+        tips:["Meal prep the quinoa and roasted chickpeas in advance — they keep for 4 days in the fridge.","Swap avocado for edamame for a lower-fat version.","The tahini dressing is great on any salad — make extra!","Add a soft-boiled egg for extra protein if not vegan."],
+      },
+      2:{id:2,title:"Avocado Toast with Poached Egg",cat:"breakfast",emoji:"🥑",time:"12 min",prepTime:"5 min",cookTime:"7 min",difficulty:"easy",cal:320,protein:14,carbs:32,fat:18,fiber:8,sugar:3,sodium:280,rating:4.8,reviews:189,servings:2,desc:"The ultimate breakfast upgrade. Creamy smashed avocado on toasted sourdough, crowned with a perfectly poached egg.",
+        tags:["quick","vegetarian"],
+        ingredients:[
+          {amount:"2 slices",name:"sourdough bread",note:"thick cut"},
+          {amount:"1",name:"ripe avocado",note:""},
+          {amount:"2",name:"large eggs",note:""},
+          {amount:"1 tbsp",name:"lemon juice",note:""},
+          {amount:"½ tsp",name:"chili flakes",note:""},
+          {amount:"1 tbsp",name:"white vinegar",note:"for poaching"},
+          {amount:"Salt & pepper",name:"to taste",note:""},
+          {amount:"Fresh herbs",name:"dill or chives",note:"optional"},
+        ],
+        steps:[
+          {title:"Toast the Bread",desc:"Toast sourdough slices until golden and crispy. Place on serving plates."},
+          {title:"Smash Avocado",desc:"Scoop avocado into a bowl. Add lemon juice, salt, and pepper. Mash with a fork, leaving some chunks for texture.",tip:"Don't over-mash — chunky is better!"},
+          {title:"Poach the Eggs",desc:"Bring 3 inches of water to a gentle simmer. Add white vinegar. Create a gentle whirlpool, crack an egg into the center, cook 3 minutes for a runny yolk.",tip:"Fresh eggs poach best. The vinegar keeps the whites together."},
+          {title:"Assemble",desc:"Spread smashed avocado on toast. Place poached egg on top. Season with chili flakes and fresh herbs."},
+        ],
+        tips:["For the perfect yolk, use very fresh eggs.","Add smoked salmon for a luxe upgrade.","Works great with rye or multigrain bread too."],
+      },
+    };
+
+    // Get recipe from URL
+    const urlId = +new URLSearchParams(window.location.search).get('id') || 1;
+    const recipe = RECIPES_DB[urlId] || RECIPES_DB[1];
+    let currentServings = recipe.servings;
+
+    // Update meta
+    document.getElementById('page-title').textContent = recipe.title + ' | FreshBite';
+    document.getElementById('page-desc').textContent = recipe.desc;
+
+    // Add Schema.org Recipe markup
+    const schema = {
+      "@context":"https://schema.org",
+      "@type":"Recipe",
+      "name":recipe.title,
+      "description":recipe.desc,
+      "image":"https://freshbite.netlify.app/assets/recipes/"+recipe.id+".jpg",
+      "author":{"@type":"Organization","name":"FreshBite"},
+      "totalTime":"PT"+recipe.time.replace(' min','M'),
+      "recipeCategory":recipe.cat,
+      "recipeCuisine":"Healthy",
+      "recipeYield":recipe.servings+" servings",
+      "nutrition":{"@type":"NutritionInformation","calories":recipe.cal+" calories"},
+      "aggregateRating":{"@type":"AggregateRating","ratingValue":recipe.rating,"reviewCount":recipe.reviews},
+      "recipeIngredient":recipe.ingredients.map(i=>i.amount+' '+i.name),
+      "recipeInstructions":recipe.steps.map((s,i)=>({
+        "@type":"HowToStep","name":s.title,"text":s.desc,"position":i+1
+      }))
+    };
+    const schemaEl = document.createElement('script');
+    schemaEl.type = 'application/ld+json';
+    schemaEl.textContent = JSON.stringify(schema);
+    document.head.appendChild(schemaEl);
+
+    function renderRecipe() {
+      const related = Object.values(RECIPES_DB).filter(r => r.id !== recipe.id).slice(0, 3);
+
+      document.getElementById('recipeContent').innerHTML = `
+        <!-- HERO -->
+        <div class="recipe-hero">
+          <div class="recipe-hero-bg"></div>
+          <div class="container">
+            <div class="recipe-hero-inner">
+              <div>
+                <div class="breadcrumb">
+                  <a href="/">Home</a> <span>/</span>
+                  <a href="/recipes/">Recipes</a> <span>/</span>
+                  <span style="color:rgba(255,255,255,0.8)">${recipe.title}</span>
+                </div>
+                <div class="recipe-category-badge">${recipe.cat}</div>
+                <h1 class="recipe-hero-title">${recipe.title}</h1>
+                <p class="recipe-hero-desc">${recipe.desc}</p>
+                <div class="recipe-quick-stats">
+                  <div class="quick-stat">
+                    <div class="quick-stat-num">⏱ ${recipe.time}</div>
+                    <div class="quick-stat-label">Total Time</div>
+                  </div>
+                  <div class="quick-stat">
+                    <div class="quick-stat-num">👤 ${recipe.servings}</div>
+                    <div class="quick-stat-label">Servings</div>
+                  </div>
+                  <div class="quick-stat">
+                    <div class="quick-stat-num">💚 ${recipe.cal}</div>
+                    <div class="quick-stat-label">Calories</div>
+                  </div>
+                  <div class="quick-stat">
+                    <div class="quick-stat-num">⭐ ${recipe.rating}</div>
+                    <div class="quick-stat-label">${recipe.reviews} reviews</div>
+                  </div>
+                </div>
+                <div class="recipe-actions">
+                  <button class="btn btn-lime" onclick="downloadPDF()">📥 Download PDF</button>
+                  <button class="btn btn-outline" onclick="window.print()" style="color:white;border-color:rgba(255,255,255,0.3)">🖨️ Print</button>
+                  <button class="btn btn-outline" onclick="shareRecipe('pinterest')" style="background:#e60023;border-color:#e60023;color:white">📌 Pin It</button>
+                </div>
+              </div>
+              <div class="recipe-hero-visual">
+                <div class="recipe-hero-img">${recipe.emoji}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="recipe-content">
+          <div class="container">
+            <div class="recipe-layout">
+              <!-- MAIN -->
+              <div class="recipe-main">
+                <!-- Ingredients -->
+                <div class="section-block">
+                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+                    <h2 class="section-block-title" style="margin:0"><span>🛒</span> Ingredients</h2>
+                    <div class="servings-control">
+                      <span class="servings-label">Servings:</span>
+                      <button class="servings-btn" onclick="adjustServings(-1)">−</button>
+                      <span class="servings-num" id="servingsNum">${recipe.servings}</span>
+                      <button class="servings-btn" onclick="adjustServings(1)">+</button>
+                    </div>
+                  </div>
+                  <div class="ingredient-list" id="ingredientList">
+                    ${recipe.ingredients.map((ing, i) => `
+                      <div class="ingredient-item" id="ing-${i}" onclick="toggleIngredient(${i})">
+                        <div class="ingredient-check" id="check-${i}"></div>
+                        <div class="ingredient-amount" id="amount-${i}">${ing.amount}</div>
+                        <div>
+                          <div class="ingredient-text">${ing.name}</div>
+                          ${ing.note ? `<div class="ingredient-note">${ing.note}</div>` : ''}
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="section-block">
+                  <h2 class="section-block-title"><span>👨‍🍳</span> Instructions</h2>
+                  <div class="steps-list">
+                    ${recipe.steps.map((step, i) => `
+                      <div class="step-item">
+                        <div class="step-num">${i + 1}</div>
+                        <div class="step-body">
+                          <div class="step-title">${step.title}</div>
+                          <div class="step-desc">${step.desc}</div>
+                          ${step.tip ? `<div class="step-tip">💡 <strong>Tip:</strong> ${step.tip}</div>` : ''}
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <!-- Nutrition Facts -->
+                <div class="section-block">
+                  <h2 class="section-block-title"><span>📊</span> Nutrition Facts</h2>
+                  <p style="font-size:0.8rem;color:var(--text-sub);margin-bottom:16px">Per serving — values are approximate</p>
+                  <div class="nutrition-header">
+                    <h3>Nutrition Facts</h3>
+                    <span class="nutrition-serving">Serving Size: 1 bowl</span>
+                  </div>
+                  <div class="nutrition-row main"><span>Calories</span><span>${recipe.cal}</span></div>
+                  <div class="nutrition-row main"><span>Total Fat</span><span>${recipe.fat}g <span class="nutrition-dv">${Math.round(recipe.fat/78*100)}%</span></span></div>
+                  <div class="nutrition-row sub"><span>Saturated Fat</span><span>2g <span class="nutrition-dv">10%</span></span></div>
+                  <div class="nutrition-row main"><span>Sodium</span><span>${recipe.sodium}mg <span class="nutrition-dv">${Math.round(recipe.sodium/2300*100)}%</span></span></div>
+                  <div class="nutrition-row main"><span>Total Carbohydrates</span><span>${recipe.carbs}g <span class="nutrition-dv">${Math.round(recipe.carbs/300*100)}%</span></span></div>
+                  <div class="nutrition-row sub"><span>Dietary Fiber</span><span>${recipe.fiber}g <span class="nutrition-dv">${Math.round(recipe.fiber/28*100)}%</span></span></div>
+                  <div class="nutrition-row sub"><span>Total Sugars</span><span>${recipe.sugar}g</span></div>
+                  <div class="nutrition-row main"><span>Protein</span><span>${recipe.protein}g</span></div>
+                  
+                  <div class="nutrition-bar-wrap">
+                    <div class="macro-bar">
+                      <span class="macro-label" style="color:var(--leaf)">Protein</span>
+                      <div class="macro-track"><div class="macro-fill" style="width:${Math.min(recipe.protein/50*100,100)}%;background:linear-gradient(90deg,var(--leaf),var(--lime))"></div></div>
+                      <span class="macro-value">${recipe.protein}g</span>
+                    </div>
+                    <div class="macro-bar">
+                      <span class="macro-label" style="color:#f59e0b">Carbs</span>
+                      <div class="macro-track"><div class="macro-fill" style="width:${Math.min(recipe.carbs/100*100,100)}%;background:linear-gradient(90deg,#d97706,#fcd34d)"></div></div>
+                      <span class="macro-value">${recipe.carbs}g</span>
+                    </div>
+                    <div class="macro-bar">
+                      <span class="macro-label" style="color:#ef4444">Fat</span>
+                      <div class="macro-track"><div class="macro-fill" style="width:${Math.min(recipe.fat/50*100,100)}%;background:linear-gradient(90deg,#dc2626,#f87171)"></div></div>
+                      <span class="macro-value">${recipe.fat}g</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Comments -->
+                <div class="section-block">
+                  <h2 class="section-block-title"><span>💬</span> Comments (${recipe.reviews})</h2>
+                  <div id="commentsList">
+                    <div class="comment">
+                      <div class="comment-avatar">S</div>
+                      <div class="comment-body">
+                        <div class="comment-header">
+                          <span class="comment-name">Sarah M.</span>
+                          <span class="comment-date">2 days ago</span>
+                          <span style="color:#f59e0b;font-size:0.85rem">★★★★★</span>
+                        </div>
+                        <p class="comment-text">This bowl is absolutely incredible! I made it for meal prep on Sunday and have been enjoying it all week. The crispy chickpeas are addictive!</p>
+                      </div>
+                    </div>
+                    <div class="comment">
+                      <div class="comment-avatar">J</div>
+                      <div class="comment-body">
+                        <div class="comment-header">
+                          <span class="comment-name">James K.</span>
+                          <span class="comment-date">5 days ago</span>
+                          <span style="color:#f59e0b;font-size:0.85rem">★★★★★</span>
+                        </div>
+                        <p class="comment-text">My go-to post-workout meal now. High protein, great taste, easy to prep. I doubled the tahini dressing recipe and it's been on everything!</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-form">
+                    <div id="commentFormContent">
+                      <p style="font-size:0.9rem;font-weight:600;margin-bottom:12px">Share Your Experience</p>
+                      <textarea class="comment-input" id="commentText" placeholder="How did this recipe turn out for you?"></textarea>
+                      <button class="btn btn-primary" onclick="postComment()">Post Comment</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Related -->
+                <div class="section-block">
+                  <h2 class="section-block-title"><span>🍽</span> You Might Also Love</h2>
+                  <div class="related-grid">
+                    ${related.map(r => `
+                      <div class="related-card" onclick="window.location='/recipes/detail.html?id=${r.id}'">
+                        <div class="related-img">${r.emoji}</div>
+                        <div class="related-title">${r.title}</div>
+                        <div class="related-info">⏱ ${r.time} · ${r.cal} cal · ⭐ ${r.rating}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+
+              <!-- SIDEBAR -->
+              <aside class="recipe-sidebar">
+                <!-- Timer -->
+                <div class="cooking-timer">
+                  <div class="timer-label">Cooking Timer</div>
+                  <div class="timer-display" id="timerDisplay">00:00</div>
+                  <select class="timer-select" id="timerPreset" onchange="setTimer(this.value)">
+                    <option value="0">Select duration</option>
+                    <option value="300">5 minutes</option>
+                    <option value="600">10 minutes</option>
+                    <option value="900">15 minutes</option>
+                    <option value="1200">20 minutes</option>
+                    <option value="1500">25 minutes</option>
+                    <option value="1800">30 minutes</option>
+                  </select>
+                  <div class="timer-controls">
+                    <button class="timer-btn timer-start" id="timerStartBtn" onclick="toggleTimer()">▶ Start</button>
+                    <button class="timer-btn timer-reset" onclick="resetTimer()">↺ Reset</button>
+                  </div>
+                </div>
+
+                <!-- Share -->
+                <div class="sidebar-card">
+                  <div class="sidebar-title">Share This Recipe</div>
+                  <div class="share-row">
+                    <button class="share-btn pinterest" onclick="shareRecipe('pinterest')">📌 Pin It</button>
+                    <button class="share-btn" onclick="shareRecipe('twitter')">🐦 Tweet</button>
+                  </div>
+                  <div class="share-row" style="margin-top:8px">
+                    <button class="share-btn" onclick="copyLink()" style="width:100%">🔗 Copy Link</button>
+                  </div>
+                </div>
+
+                <!-- Tags -->
+                <div class="sidebar-card">
+                  <div class="sidebar-title">Tags</div>
+                  <div class="tags-wrap">
+                    ${recipe.tags.map(t => `<span class="tag-chip" onclick="window.location='/recipes/?cat=${t}'">#${t}</span>`).join('')}
+                    <span class="tag-chip">#${recipe.cat}</span>
+                    <span class="tag-chip">#healthy</span>
+                    <span class="tag-chip">#easy</span>
+                  </div>
+                </div>
+
+                <!-- Tips -->
+                <div class="sidebar-card">
+                  <div class="sidebar-title">Pro Tips</div>
+                  <div class="tips-list">
+                    ${recipe.tips.map(t => `
+                      <div class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span>${t}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <!-- Rating -->
+                <div class="rating-section">
+                  <div class="sidebar-title">Ratings</div>
+                  <div class="rating-avg">
+                    <div class="rating-big">${recipe.rating}</div>
+                    <div>
+                      <div class="rating-stars">★★★★★</div>
+                      <div class="rating-count">${recipe.reviews} reviews</div>
+                    </div>
+                  </div>
+                  <div class="rating-bars">
+                    ${[5,4,3,2,1].map(n => `
+                      <div class="rating-bar-row">
+                        <span>${n}★</span>
+                        <div class="rating-bar-track"><div class="rating-bar-fill" style="width:${n===5?85:n===4?12:n===3?2:1}%"></div></div>
+                        <span>${n===5?85:n===4?12:n===3?2:1}%</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="user-rating">
+                    <div class="user-rating-title">Rate this recipe</div>
+                    <div class="star-picker" id="starPicker">
+                      <span onclick="setRating(1)" data-v="1">☆</span>
+                      <span onclick="setRating(2)" data-v="2">☆</span>
+                      <span onclick="setRating(3)" data-v="3">☆</span>
+                      <span onclick="setRating(4)" data-v="4">☆</span>
+                      <span onclick="setRating(5)" data-v="5">☆</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Ad -->
+                <div class="ad-rect">
+                  <div style="font-size:0.65rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Advertisement</div>
+                  <div style="font-weight:600">300 × 250</div>
+                  <div>Medium Rectangle</div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    renderRecipe();
+
+    // Ingredient toggle
+    function toggleIngredient(i) {
+      const item = document.getElementById('ing-'+i);
+      const check = document.getElementById('check-'+i);
+      item.classList.toggle('checked');
+      check.textContent = item.classList.contains('checked') ? '✓' : '';
+    }
+
+    // Servings adjuster
+    function adjustServings(delta) {
+      const newS = Math.max(1, Math.min(12, currentServings + delta));
+      const ratio = newS / currentServings;
+      currentServings = newS;
+      document.getElementById('servingsNum').textContent = newS;
+      // Update amounts visually
+      recipe.ingredients.forEach((ing, i) => {
+        const el = document.getElementById('amount-'+i);
+        if (el) {
+          // Simple numeric scaling
+          const num = parseFloat(ing.amount);
+          if (!isNaN(num)) {
+            const newNum = (num * newS / recipe.servings);
+            el.textContent = (Number.isInteger(newNum) ? newNum : +newNum.toFixed(1)) + ing.amount.replace(/[\d.]+\s*/, ' ').trim();
+          }
+        }
+      });
+    }
+
+    // Cooking timer
+    let timerInterval = null, timerSeconds = 0, timerRunning = false;
+
+    function setTimer(v) {
+      timerSeconds = +v;
+      timerRunning = false;
+      clearInterval(timerInterval);
+      document.getElementById('timerStartBtn').textContent = '▶ Start';
+      updateTimerDisplay();
+    }
+
+    function toggleTimer() {
+      if (timerSeconds <= 0) return;
+      timerRunning = !timerRunning;
+      const btn = document.getElementById('timerStartBtn');
+      if (timerRunning) {
+        btn.textContent = '⏸ Pause';
+        timerInterval = setInterval(() => {
+          timerSeconds--;
+          updateTimerDisplay();
+          if (timerSeconds <= 0) {
+            clearInterval(timerInterval);
+            btn.textContent = '✅ Done!';
+            document.getElementById('timerDisplay').style.color = '#ef4444';
+          }
+        }, 1000);
+      } else {
+        clearInterval(timerInterval);
+        btn.textContent = '▶ Resume';
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timerSeconds = 0;
+      document.getElementById('timerDisplay').textContent = '00:00';
+      document.getElementById('timerDisplay').style.color = '';
+      document.getElementById('timerStartBtn').textContent = '▶ Start';
+      document.getElementById('timerPreset').value = '0';
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerSeconds / 60).toString().padStart(2,'0');
+      const s = (timerSeconds % 60).toString().padStart(2,'0');
+      document.getElementById('timerDisplay').textContent = m+':'+s;
+    }
+
+    // PDF download gate
+    function downloadPDF() {
+      const user = localStorage.getItem('fb_user');
+      if (!user) { document.getElementById('pdfModal').classList.add('open'); }
+      else {
+        // Generate simple PDF content
+        alert('📄 Generating your PDF... In production, this would download a beautifully formatted recipe PDF!');
+      }
+    }
+
+    function closePdfModal() { document.getElementById('pdfModal').classList.remove('open'); }
+
+    // Share
+    function shareRecipe(platform) {
+      const url = encodeURIComponent(window.location.href);
+      const title = encodeURIComponent(recipe.title + ' - FreshBite');
+      const desc = encodeURIComponent(recipe.desc);
+      if (platform === 'pinterest') window.open(`https://pinterest.com/pin/create/button/?url=${url}&description=${title}&media=`);
+      if (platform === 'twitter') window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`);
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => alert('Link copied to clipboard!'));
+    }
+
+    // Star rating
+    function setRating(n) {
+      const stars = document.querySelectorAll('#starPicker span');
+      stars.forEach((s, i) => { s.textContent = i < n ? '★' : '☆'; s.style.color = i < n ? '#f59e0b' : ''; });
+      const user = localStorage.getItem('fb_user');
+      if (!user) setTimeout(() => { window.location = '/auth/login.html'; }, 500);
+    }
+
+    // Comment
+    function postComment() {
+      const user = localStorage.getItem('fb_user');
+      if (!user) { window.location = '/auth/login.html'; return; }
+      const text = document.getElementById('commentText').value.trim();
+      if (!text) return;
+      const userData = JSON.parse(user);
+      const list = document.getElementById('commentsList');
+      const comment = document.createElement('div');
+      comment.className = 'comment';
+      comment.innerHTML = `
+        <div class="comment-avatar">${userData.name?.[0] || 'U'}</div>
+        <div class="comment-body">
+          <div class="comment-header"><span class="comment-name">${userData.name || 'You'}</span><span class="comment-date">Just now</span></div>
+          <p class="comment-text">${text}</p>
+        </div>`;
+      list.appendChild(comment);
+      document.getElementById('commentText').value = '';
+    }
+
+    // Dark mode
+    const html = document.documentElement;
+    const saved = localStorage.getItem('fb_theme') || 'light';
+    html.setAttribute('data-theme', saved);
+    const tt = document.getElementById('themeToggle');
+    tt.textContent = saved === 'dark' ? '☀️' : '🌙';
+    tt.addEventListener('click', () => {
+      const n = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', n);
+      tt.textContent = n === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('fb_theme', n);
+    });
+
+    // Close modal on overlay click
+    document.getElementById('pdfModal').addEventListener('click', function(e) {
+      if (e.target === this) closePdfModal();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Healthy Living Blog | FreshBite</title>
+  <meta name="description" content="Expert nutrition tips, wellness guides, and healthy eating inspiration. Backed by science, written for real life." />
+  <link rel="canonical" href="https://freshbite.netlify.app/blog/" />
+  <meta property="og:title" content="Healthy Living Blog | FreshBite" />
+  <meta property="og:description" content="Expert nutrition tips, wellness guides and healthy eating inspiration." />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"FreshBite Blog","url":"https://freshbite.netlify.app/blog/","description":"Healthy living, nutrition tips, and wellness guides"}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--forest:#1c3a2a;--leaf:#2d6a4f;--lime:#74c69d;--mint:#b7e4c7;--cream:#f8f4ef;--cream-2:#f0ebe3;--charcoal:#1a1a1a;--muted:#6b7280;--white:#ffffff;--bg:var(--cream);--bg-2:var(--cream-2);--text:var(--charcoal);--text-sub:var(--muted);--border:rgba(28,58,42,0.12);--card-bg:var(--white);--nav-bg:rgba(248,244,239,0.9);--font-display:'Cormorant Garamond',serif;--font-body:'DM Sans',sans-serif;--r-sm:8px;--r-md:16px;--r-lg:24px;--r-xl:40px;--shadow-md:0 4px 20px rgba(28,58,42,0.12);--shadow-lg:0 12px 48px rgba(28,58,42,0.16);--transition:0.3s cubic-bezier(0.4,0,0.2,1)}
+    [data-theme="dark"]{--bg:#0d1f16;--bg-2:#111e18;--text:#e8f5ed;--text-sub:#8dab97;--border:rgba(116,198,157,0.15);--card-bg:#162318;--nav-bg:rgba(13,31,22,0.92)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background var(--transition),color var(--transition)}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font-family:var(--font-body)}
+    ul{list-style:none}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;padding:0 32px}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;font-weight:600;color:var(--forest)}
+    [data-theme="dark"] .nav-logo{color:var(--lime)}
+    .nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--leaf),var(--lime));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{font-size:0.875rem;font-weight:500;color:var(--text-sub);transition:color var(--transition)}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:100px;font-size:0.875rem;font-weight:500;border:none;transition:all var(--transition);cursor:pointer}
+    .btn-primary{background:var(--forest);color:white}
+    .btn-primary:hover{background:var(--leaf)}
+    .btn-outline{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+    [data-theme="dark"] .btn-outline{color:var(--lime);border-color:var(--lime)}
+    .theme-toggle{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all var(--transition);color:var(--text)}
+    @media(max-width:768px){.nav-links{display:none}}
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 24px}
+
+    .page-hero{padding:120px 0 64px;background:var(--forest);position:relative;overflow:hidden}
+    .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 20% 50%,rgba(116,198,157,0.15),transparent),linear-gradient(135deg,#0d1f16,#1c3a2a)}
+    .page-hero-inner{position:relative;z-index:1}
+    .page-eyebrow{font-size:0.7rem;font-weight:600;letter-spacing:0.25em;text-transform:uppercase;color:var(--lime);margin-bottom:12px}
+    .page-title{font-family:var(--font-display);font-size:clamp(3rem,6vw,6rem);font-weight:300;color:white;line-height:1.02;margin-bottom:16px}
+    .page-title em{font-style:italic;color:var(--lime)}
+    .page-subtitle{color:rgba(255,255,255,0.55);font-size:1rem;max-width:500px}
+
+    /* BLOG LAYOUT */
+    .blog-section{padding:64px 0 80px}
+    .blog-layout{display:grid;grid-template-columns:1fr 320px;gap:40px;align-items:start}
+    @media(max-width:1024px){.blog-layout{grid-template-columns:1fr}}
+
+    /* FEATURED POST */
+    .featured-post{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;margin-bottom:32px;cursor:pointer;transition:all var(--transition)}
+    .featured-post:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+    .featured-post-img{height:300px;background:linear-gradient(135deg,var(--forest),#0d1f16);display:flex;align-items:center;justify-content:center;font-size:8rem;position:relative;overflow:hidden}
+    .featured-badge{position:absolute;top:16px;left:16px;background:var(--lime);color:var(--forest);font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px}
+    .featured-body{padding:32px}
+    .post-category{font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--lime);margin-bottom:10px}
+    .post-title{font-family:var(--font-display);font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:12px;color:var(--text);transition:color var(--transition)}
+    .featured-post:hover .post-title{color:var(--leaf)}
+    .post-excerpt{font-size:0.9rem;color:var(--text-sub);line-height:1.7;margin-bottom:20px}
+    .post-meta{display:flex;align-items:center;gap:16px;font-size:0.8rem;color:var(--text-sub)}
+    .post-author{display:flex;align-items:center;gap:8px}
+    .author-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--leaf),var(--lime));display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;font-weight:700}
+
+    /* POSTS GRID */
+    .posts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:32px}
+    @media(max-width:640px){.posts-grid{grid-template-columns:1fr}}
+    .post-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all var(--transition)}
+    .post-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--lime)}
+    .post-card-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:var(--bg-2)}
+    .post-card-body{padding:20px}
+    .post-card-title{font-family:var(--font-display);font-size:1.3rem;font-weight:500;line-height:1.25;margin-bottom:8px;color:var(--text);transition:color var(--transition)}
+    .post-card:hover .post-card-title{color:var(--leaf)}
+    .post-card-excerpt{font-size:0.82rem;color:var(--text-sub);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px}
+    .post-footer{display:flex;align-items:center;justify-content:space-between;font-size:0.75rem;color:var(--text-sub)}
+    .read-time{display:flex;align-items:center;gap:4px}
+
+    /* SIDEBAR */
+    .sidebar{position:sticky;top:90px}
+    .sidebar-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-bottom:20px}
+    .sidebar-title{font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-sub);margin-bottom:16px}
+    .topic-list{display:flex;flex-direction:column;gap:8px}
+    .topic-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:0.875rem;transition:color var(--transition)}
+    .topic-item:last-child{border-bottom:none}
+    .topic-item:hover{color:var(--leaf)}
+    .topic-count{font-size:0.75rem;color:var(--text-sub);background:var(--bg-2);padding:2px 8px;border-radius:100px}
+    .popular-post{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:color var(--transition)}
+    .popular-post:last-child{border-bottom:none}
+    .popular-post:hover{color:var(--leaf)}
+    .popular-emoji{font-size:1.5rem;flex-shrink:0}
+    .popular-title{font-size:0.82rem;font-weight:500;line-height:1.4;margin-bottom:3px}
+    .popular-meta{font-size:0.72rem;color:var(--text-sub)}
+    .newsletter-card{background:linear-gradient(135deg,var(--forest),#0a2218);border-radius:var(--r-lg);padding:24px;color:white;margin-bottom:20px}
+    .newsletter-title{font-family:var(--font-display);font-size:1.4rem;margin-bottom:8px}
+    .newsletter-sub{font-size:0.8rem;color:rgba(255,255,255,0.55);margin-bottom:16px}
+    .newsletter-input{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r-sm);padding:10px 12px;color:white;font-family:var(--font-body);font-size:0.85rem;outline:none;margin-bottom:10px}
+    .newsletter-input::placeholder{color:rgba(255,255,255,0.35)}
+    .newsletter-btn{width:100%;padding:11px;border-radius:var(--r-sm);background:var(--lime);color:var(--forest);font-weight:700;font-size:0.85rem;border:none;cursor:pointer;transition:all var(--transition)}
+    .newsletter-btn:hover{background:var(--mint)}
+    .tag-cloud{display:flex;gap:8px;flex-wrap:wrap}
+    .tag-pill{padding:5px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:100px;font-size:0.75rem;color:var(--text-sub);cursor:pointer;transition:all var(--transition)}
+    .tag-pill:hover{border-color:var(--lime);color:var(--leaf)}
+    .ad-box{background:var(--bg-2);border:1px dashed var(--border);border-radius:var(--r-md);padding:24px;text-align:center;font-size:0.75rem;color:var(--text-sub)}
+
+    .load-more{display:flex;justify-content:center;margin-top:32px}
+    .load-more-btn{padding:14px 40px;border-radius:100px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-family:var(--font-body);font-size:0.875rem;cursor:pointer;transition:all var(--transition)}
+    .load-more-btn:hover{border-color:var(--lime);color:var(--leaf)}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><div class="nav-logo-icon">🌿</div>FreshBite</a>
+      <ul class="nav-links">
+        <li><a href="/recipes/">Recipes</a></li>
+        <li><a href="/juice-builder/">Juice Lab</a></li>
+        <li><a href="/blog/" class="active">Blog</a></li>
+        <li><a href="/#ai-generator">AI Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+        <a href="/auth/login.html" class="btn btn-outline" style="padding:9px 20px;">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="container page-hero-inner">
+      <div class="page-eyebrow">Healthy Living Blog</div>
+      <h1 class="page-title">Nourish Your<br><em>Mind & Body</em></h1>
+      <p class="page-subtitle">Evidence-based nutrition guides, meal prep tips, and wellness inspiration for real life.</p>
+    </div>
+  </div>
+
+  <div class="blog-section">
+    <div class="container">
+      <div class="blog-layout">
+        <div>
+          <!-- FEATURED POST -->
+          <article class="featured-post" onclick="window.location='/blog/post.html?id=1'">
+            <div class="featured-post-img">
+              🥗
+              <div class="featured-badge">✨ Featured</div>
+            </div>
+            <div class="featured-body">
+              <div class="post-category">Nutrition Science</div>
+              <h2 class="post-title">The Complete Guide to Anti-Inflammatory Eating in 2024</h2>
+              <p class="post-excerpt">Chronic inflammation is linked to nearly every major disease. But the good news? The foods you eat every day can dramatically reduce it. This comprehensive guide covers the science, the best foods to eat, and a practical 7-day meal plan to get you started.</p>
+              <div class="post-meta">
+                <div class="post-author">
+                  <div class="author-avatar">N</div>
+                  <span>Dr. Nadia Osei, RD</span>
+                </div>
+                <span>·</span>
+                <span>March 14, 2026</span>
+                <span>·</span>
+                <span>⏱ 8 min read</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- POSTS GRID -->
+          <div class="posts-grid" id="postsGrid"></div>
+
+          <div class="load-more">
+            <button class="load-more-btn" onclick="loadMore()">Load More Articles</button>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+          <!-- Newsletter -->
+          <div class="newsletter-card">
+            <div class="newsletter-title">Weekly Wellness</div>
+            <p class="newsletter-sub">Get our best recipes + nutrition tips every Sunday morning.</p>
+            <input type="email" class="newsletter-input" placeholder="your@email.com" />
+            <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe Free</button>
+          </div>
+
+          <!-- Topics -->
+          <div class="sidebar-card">
+            <div class="sidebar-title">Browse Topics</div>
+            <div class="topic-list">
+              <div class="topic-item">🥦 Nutrition Science <span class="topic-count">24</span></div>
+              <div class="topic-item">🍳 Meal Prep <span class="topic-count">18</span></div>
+              <div class="topic-item">🧘 Gut Health <span class="topic-count">15</span></div>
+              <div class="topic-item">💪 Sports Nutrition <span class="topic-count">12</span></div>
+              <div class="topic-item">🌱 Plant-Based <span class="topic-count">21</span></div>
+              <div class="topic-item">🧠 Mental Wellness <span class="topic-count">10</span></div>
+            </div>
+          </div>
+
+          <!-- Popular -->
+          <div class="sidebar-card">
+            <div class="sidebar-title">Most Popular</div>
+            <div class="topic-list">
+              <div class="popular-post" onclick="window.location='/blog/post.html?id=3'">
+                <span class="popular-emoji">🫙</span>
+                <div>
+                  <div class="popular-title">Meal Prep in 2 Hours: The Ultimate Sunday Guide</div>
+                  <div class="popular-meta">⏱ 6 min · 12.4k reads</div>
+                </div>
+              </div>
+              <div class="popular-post" onclick="window.location='/blog/post.html?id=4'">
+                <span class="popular-emoji">🌿</span>
+                <div>
+                  <div class="popular-title">10 High-Protein Vegan Foods That Actually Taste Good</div>
+                  <div class="popular-meta">⏱ 4 min · 9.8k reads</div>
+                </div>
+              </div>
+              <div class="popular-post" onclick="window.location='/blog/post.html?id=5'">
+                <span class="popular-emoji">⚡</span>
+                <div>
+                  <div class="popular-title">Why You're Always Tired (And What to Eat About It)</div>
+                  <div class="popular-meta">⏱ 5 min · 8.2k reads</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="sidebar-card">
+            <div class="sidebar-title">Popular Tags</div>
+            <div class="tag-cloud">
+              <span class="tag-pill">#antiinflammatory</span>
+              <span class="tag-pill">#mealprep</span>
+              <span class="tag-pill">#vegan</span>
+              <span class="tag-pill">#guthealth</span>
+              <span class="tag-pill">#weightloss</span>
+              <span class="tag-pill">#protein</span>
+              <span class="tag-pill">#intermittentfasting</span>
+              <span class="tag-pill">#omega3</span>
+            </div>
+          </div>
+
+          <!-- Ad -->
+          <div class="ad-box">
+            <div style="font-size:0.65rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Advertisement</div>
+            <!-- Google AdSense 300x250 -->
+            <div style="font-weight:600">300 × 250</div>
+            <div>Medium Rectangle Ad</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const POSTS = [
+      {id:2,emoji:'🫙',cat:'Meal Prep',title:'Meal Prep in 2 Hours: The Ultimate Sunday Guide',excerpt:'Transform your entire week of healthy eating with just 2 hours on Sunday. We cover proteins, grains, sauces, and snacks.',author:'Emma Chen',date:'March 12, 2026',readTime:6,reads:'12.4k'},
+      {id:3,emoji:'🌿',cat:'Plant-Based',title:'10 High-Protein Vegan Foods That Actually Taste Amazing',excerpt:'Getting enough protein on a plant-based diet is easier than you think. These 10 foods will transform your meals.',author:'Marcus Webb',date:'March 10, 2026',readTime:4,reads:'9.8k'},
+      {id:4,emoji:'⚡',cat:'Energy & Fatigue',title:"Why You're Always Tired (And What to Eat About It)",excerpt:'Constant fatigue often comes down to nutritional gaps. Discover the key nutrients most people are missing.',author:'Dr. Nadia Osei',date:'March 8, 2026',readTime:5,reads:'8.2k'},
+      {id:5,emoji:'🧠',cat:'Gut Health',title:'The Gut-Brain Connection: How Your Microbiome Shapes Your Mood',excerpt:'Your gut contains more neurons than your spinal cord. Here\'s how to feed your microbiome for better mental health.',author:'Dr. Sarah Kim',date:'March 6, 2026',readTime:7,reads:'7.1k'},
+      {id:6,emoji:'🥑',cat:'Nutrition Science',title:'Healthy Fats vs. Bad Fats: The Complete 2026 Guide',excerpt:'The saturated fat debate is more nuanced than ever. We break down the latest research on dietary fats.',author:'Emma Chen',date:'March 4, 2026',readTime:6,reads:'6.5k'},
+      {id:7,emoji:'💪',cat:'Sports Nutrition',title:'What to Eat Before and After Your Workout (By Science)',excerpt:'Timing your nutrition around exercise can increase performance by up to 40%. Here\'s exactly what to eat and when.',author:'Marcus Webb',date:'March 2, 2026',readTime:5,reads:'5.9k'},
+    ];
+
+    let shown = 4;
+
+    function renderPosts() {
+      const grid = document.getElementById('postsGrid');
+      const toShow = POSTS.slice(0, shown);
+      grid.innerHTML = toShow.map(p => `
+        <article class="post-card" onclick="window.location='/blog/post.html?id=${p.id}'">
+          <div class="post-card-img">${p.emoji}</div>
+          <div class="post-card-body">
+            <div class="post-category" style="font-size:0.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--lime);margin-bottom:6px">${p.cat}</div>
+            <h2 class="post-card-title">${p.title}</h2>
+            <p class="post-card-excerpt">${p.excerpt}</p>
+            <div class="post-footer">
+              <span>${p.author}</span>
+              <span class="read-time">⏱ ${p.readTime} min · ${p.reads} reads</span>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function loadMore() {
+      shown = Math.min(shown + 2, POSTS.length);
+      renderPosts();
+      if (shown >= POSTS.length) {
+        document.querySelector('.load-more-btn').textContent = 'All Caught Up! ✓';
+        document.querySelector('.load-more-btn').disabled = true;
+      }
+    }
+
+    function subscribeNewsletter() {
+      const input = document.querySelector('.newsletter-input');
+      if (!input.value || !input.value.includes('@')) { alert('Please enter a valid email.'); return; }
+      const saved = JSON.parse(localStorage.getItem('fb_newsletter_emails') || '[]');
+      saved.push(input.value);
+      localStorage.setItem('fb_newsletter_emails', JSON.stringify(saved));
+      alert('🎉 You\'re subscribed! Check your inbox for a welcome email.');
+      input.value = '';
+    }
+
+    // Dark mode
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('fb_theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    const tt = document.getElementById('themeToggle');
+    tt.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    tt.addEventListener('click', () => {
+      const n = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', n);
+      tt.textContent = n === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('fb_theme', n);
+    });
+
+    renderPosts();
+  </script>
+</body>
+</html>

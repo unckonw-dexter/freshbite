@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Healthy Recipes Directory | FreshBite</title>
+  <meta name="description" content="Browse 500+ healthy recipes organized by category. Filter by breakfast, lunch, dinner, desserts, quick meals and more. All with nutrition info." />
+  <link rel="canonical" href="https://freshbite.netlify.app/recipes/" />
+  <meta property="og:title" content="Healthy Recipes | FreshBite" />
+  <meta property="og:description" content="Browse 500+ healthy, delicious recipes with nutrition info." />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"Healthy Recipes","url":"https://freshbite.netlify.app/recipes/","description":"Browse 500+ healthy recipes"}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --forest:#1c3a2a; --leaf:#2d6a4f; --lime:#74c69d; --mint:#b7e4c7;
+      --cream:#f8f4ef; --cream-2:#f0ebe3; --sand:#e8ddd0;
+      --charcoal:#1a1a1a; --muted:#6b7280; --white:#ffffff;
+      --bg:var(--cream); --bg-2:var(--cream-2); --text:var(--charcoal);
+      --text-sub:var(--muted); --border:rgba(28,58,42,0.12);
+      --card-bg:var(--white); --nav-bg:rgba(248,244,239,0.9);
+      --font-display:'Cormorant Garamond',serif;
+      --font-body:'DM Sans',sans-serif;
+      --r-sm:8px; --r-md:16px; --r-lg:24px; --r-xl:40px;
+      --shadow-sm:0 1px 3px rgba(28,58,42,0.08);
+      --shadow-md:0 4px 20px rgba(28,58,42,0.12);
+      --shadow-lg:0 12px 48px rgba(28,58,42,0.16);
+      --transition:0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    [data-theme="dark"] {
+      --bg:#0d1f16; --bg-2:#111e18; --text:#e8f5ed; --text-sub:#8dab97;
+      --border:rgba(116,198,157,0.15); --card-bg:#162318; --nav-bg:rgba(13,31,22,0.92);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background var(--transition),color var(--transition)}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font-family:var(--font-body)}
+    ul{list-style:none}
+
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;padding:0 32px}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;font-weight:600;color:var(--forest)}
+    [data-theme="dark"] .nav-logo{color:var(--lime)}
+    .nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--leaf),var(--lime));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{font-size:0.875rem;font-weight:500;color:var(--text-sub);transition:color var(--transition)}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:100px;font-size:0.875rem;font-weight:500;border:none;transition:all var(--transition);cursor:pointer}
+    .btn-primary{background:var(--forest);color:white}
+    .btn-primary:hover{background:var(--leaf)}
+    .btn-outline{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+    [data-theme="dark"] .btn-outline{color:var(--lime);border-color:var(--lime)}
+    .btn-outline:hover{background:var(--forest);color:white}
+    .theme-toggle{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all var(--transition);color:var(--text)}
+    .theme-toggle:hover{background:var(--bg-2)}
+    @media(max-width:768px){.nav-links{display:none}}
+
+    .page-hero{padding:120px 0 64px;background:var(--forest);position:relative;overflow:hidden}
+    .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(45,106,79,0.5),transparent),linear-gradient(135deg,#0d1f16,#1c3a2a)}
+    .page-hero-content{position:relative;z-index:1}
+    .page-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:20px}
+    .page-breadcrumb a{color:rgba(255,255,255,0.5);transition:color var(--transition)}
+    .page-breadcrumb a:hover{color:var(--lime)}
+    .page-title{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,5rem);font-weight:300;color:white;line-height:1.05;margin-bottom:12px}
+    .page-subtitle{color:rgba(255,255,255,0.55);font-size:1rem;max-width:500px}
+    .page-stats{display:flex;gap:32px;margin-top:32px;flex-wrap:wrap}
+    .page-stat{text-align:center}
+    .page-stat-num{font-family:var(--font-display);font-size:2rem;color:var(--lime)}
+    .page-stat-label{font-size:0.75rem;color:rgba(255,255,255,0.5)}
+
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 24px}
+
+    .filters-bar{background:var(--card-bg);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:68px;z-index:90}
+    .filters-inner{display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none;padding:0 24px}
+    .filters-inner::-webkit-scrollbar{display:none}
+    .filter-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:100px;font-size:0.8rem;font-weight:500;border:1.5px solid var(--border);background:transparent;color:var(--text-sub);cursor:pointer;transition:all var(--transition)}
+    .filter-chip:hover{border-color:var(--lime);color:var(--text)}
+    .filter-chip.active{background:var(--forest);border-color:var(--forest);color:white}
+    [data-theme="dark"] .filter-chip.active{background:var(--leaf);border-color:var(--leaf)}
+    .filter-chip .chip-icon{font-size:1rem}
+
+    .sort-row{display:flex;align-items:center;justify-content:space-between;padding:24px 0 16px;flex-wrap:wrap;gap:12px}
+    .results-count{font-size:0.875rem;color:var(--text-sub)}
+    .results-count strong{color:var(--text)}
+    .sort-select{padding:8px 14px;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:0.85rem;outline:none;cursor:pointer}
+    .sort-select:focus{border-color:var(--lime)}
+
+    .search-bar-wrap{position:relative;margin:0 0 0}
+    .search-bar{display:flex;align-items:center;background:var(--bg-2);border:1.5px solid var(--border);border-radius:var(--r-md);padding:6px 6px 6px 16px;transition:all var(--transition)}
+    .search-bar:focus-within{border-color:var(--lime);background:var(--card-bg)}
+    .search-bar input{flex:1;background:none;border:none;outline:none;font-family:var(--font-body);font-size:0.9rem;color:var(--text)}
+    .search-bar input::placeholder{color:var(--text-sub)}
+    .search-bar button{background:var(--leaf);color:white;border:none;border-radius:var(--r-sm);padding:8px 16px;font-size:0.8rem;font-weight:600;transition:background var(--transition)}
+    .search-bar button:hover{background:var(--forest)}
+
+    .recipes-main{padding:32px 0 80px}
+    .recipes-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start}
+    @media(max-width:1024px){.recipes-layout{grid-template-columns:1fr}}
+
+    .sidebar{position:sticky;top:140px}
+    .sidebar-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-bottom:20px}
+    .sidebar-title{font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-sub);margin-bottom:16px}
+    .sidebar-option{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;font-size:0.875rem;color:var(--text-sub);transition:color var(--transition)}
+    .sidebar-option:hover{color:var(--text)}
+    .sidebar-option input[type="checkbox"]{accent-color:var(--leaf);width:16px;height:16px;cursor:pointer}
+    .sidebar-range{width:100%;accent-color:var(--leaf);cursor:pointer}
+    .range-labels{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-sub);margin-top:6px}
+    .ad-sidebar{background:var(--bg-2);border:1px dashed var(--border);border-radius:var(--r-md);padding:24px;text-align:center;font-size:0.75rem;color:var(--text-sub)}
+
+    .recipes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+    .recipe-card{background:var(--card-bg);border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);transition:all var(--transition);cursor:pointer}
+    .recipe-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--lime)}
+    .recipe-card-img{width:100%;height:200px;object-fit:cover;background:var(--bg-2);display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden;transition:transform 0.5s ease}
+    .recipe-card:hover .recipe-card-img{transform:scale(1.04)}
+    .recipe-card-img-wrap{position:relative}
+    .recipe-badge{position:absolute;top:10px;left:10px;background:var(--forest);color:white;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:100px}
+    .recipe-save{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.95);border:none;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+    .recipe-save:hover{transform:scale(1.1)}
+    .recipe-card-body{padding:18px}
+    .recipe-meta{display:flex;gap:12px;margin-bottom:8px}
+    .recipe-meta-item{display:flex;align-items:center;gap:4px;font-size:0.72rem;color:var(--text-sub)}
+    .recipe-title{font-family:var(--font-display);font-size:1.2rem;font-weight:500;line-height:1.2;margin-bottom:6px;color:var(--text);transition:color var(--transition)}
+    .recipe-card:hover .recipe-title{color:var(--leaf)}
+    .recipe-desc{font-size:0.82rem;color:var(--text-sub);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .recipe-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-top:1px solid var(--border)}
+    .recipe-rating{display:flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--text-sub)}
+    .stars{color:#f59e0b}
+    .recipe-calories{font-size:0.8rem;font-weight:600;color:var(--leaf)}
+    .difficulty{display:inline-flex;align-items:center;font-size:0.68rem;padding:2px 7px;border-radius:100px}
+    .difficulty-easy{background:rgba(116,198,157,0.15);color:var(--leaf)}
+    .difficulty-medium{background:rgba(245,158,11,0.15);color:#d97706}
+    .difficulty-hard{background:rgba(239,68,68,0.15);color:#dc2626}
+
+    .pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:40px 0}
+    .page-btn{width:40px;height:40px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:0.875rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+    .page-btn:hover{border-color:var(--lime);color:var(--leaf)}
+    .page-btn.active{background:var(--forest);border-color:var(--forest);color:white}
+
+    .no-results{text-align:center;padding:80px 0;color:var(--text-sub)}
+    .no-results-icon{font-size:4rem;margin-bottom:16px}
+    .no-results-title{font-family:var(--font-display);font-size:2rem;color:var(--text);margin-bottom:8px}
+
+    .eyebrow{font-size:0.7rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--leaf)}
+
+    /* Mobile sidebar toggle */
+    .sidebar-toggle{display:none;align-items:center;gap:8px;padding:10px 16px;background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--r-md);font-size:0.875rem;cursor:pointer;color:var(--text);margin-bottom:16px}
+    @media(max-width:1024px){
+      .sidebar-toggle{display:flex}
+      .sidebar{display:none;position:static}
+      .sidebar.open{display:block}
+      .recipes-layout{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><div class="nav-logo-icon">🌿</div>FreshBite</a>
+      <ul class="nav-links">
+        <li><a href="/recipes/" class="active">Recipes</a></li>
+        <li><a href="/juice-builder/">Juice Lab</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/#ai-generator">AI Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+        <a href="/auth/login.html" class="btn btn-outline" style="padding:9px 20px;">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="container page-hero-content">
+      <div class="page-breadcrumb">
+        <a href="/">Home</a> <span>/</span> <span style="color:rgba(255,255,255,0.8)">Recipes</span>
+      </div>
+      <h1 class="page-title">Healthy Recipes<br>for Every Meal</h1>
+      <p class="page-subtitle">500+ nutritionist-approved recipes, from 5-minute breakfasts to gourmet dinners.</p>
+      <div class="page-stats">
+        <div class="page-stat"><div class="page-stat-num">500+</div><div class="page-stat-label">Recipes</div></div>
+        <div class="page-stat"><div class="page-stat-num">8</div><div class="page-stat-label">Categories</div></div>
+        <div class="page-stat"><div class="page-stat-num">100%</div><div class="page-stat-label">Nutrition Verified</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTERS BAR -->
+  <div class="filters-bar">
+    <div class="filters-inner">
+      <div class="filter-chip active" data-cat="all"><span class="chip-icon">✨</span> All</div>
+      <div class="filter-chip" data-cat="breakfast"><span class="chip-icon">🌅</span> Breakfast</div>
+      <div class="filter-chip" data-cat="lunch"><span class="chip-icon">🥗</span> Lunch</div>
+      <div class="filter-chip" data-cat="dinner"><span class="chip-icon">🍽</span> Dinner</div>
+      <div class="filter-chip" data-cat="desserts"><span class="chip-icon">🍰</span> Desserts</div>
+      <div class="filter-chip" data-cat="healthy"><span class="chip-icon">💚</span> Healthy</div>
+      <div class="filter-chip" data-cat="quick"><span class="chip-icon">⚡</span> Quick</div>
+      <div class="filter-chip" data-cat="vegan"><span class="chip-icon">🌿</span> Vegan</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="recipes-main">
+    <div class="container">
+      <button class="sidebar-toggle" onclick="toggleSidebar()">🔧 Filters & Sort</button>
+
+      <div class="recipes-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+          <div class="search-bar-wrap" style="margin-bottom:20px;">
+            <div class="search-bar">
+              <input type="text" id="recipeSearch" placeholder="Search recipes…" />
+              <button onclick="applyFilters()">Go</button>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sidebar-title">Difficulty</div>
+            <label class="sidebar-option"><input type="checkbox" value="easy" onchange="applyFilters()"> Easy</label>
+            <label class="sidebar-option"><input type="checkbox" value="medium" onchange="applyFilters()"> Medium</label>
+            <label class="sidebar-option"><input type="checkbox" value="hard" onchange="applyFilters()"> Hard</label>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sidebar-title">Max Calories</div>
+            <input type="range" class="sidebar-range" min="100" max="900" value="900" id="calRange" oninput="updateCalLabel(this.value); applyFilters()" />
+            <div class="range-labels"><span>100</span><span id="calLabel">900 cal</span><span>900</span></div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sidebar-title">Dietary</div>
+            <label class="sidebar-option"><input type="checkbox" value="vegan" onchange="applyFilters()"> 🌿 Vegan</label>
+            <label class="sidebar-option"><input type="checkbox" value="gluten-free" onchange="applyFilters()"> 🌾 Gluten-Free</label>
+            <label class="sidebar-option"><input type="checkbox" value="keto" onchange="applyFilters()"> 🥩 Keto</label>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sidebar-title">Cook Time</div>
+            <label class="sidebar-option"><input type="radio" name="time" value="all" checked onchange="applyFilters()"> All</label>
+            <label class="sidebar-option"><input type="radio" name="time" value="under15" onchange="applyFilters()"> Under 15 min</label>
+            <label class="sidebar-option"><input type="radio" name="time" value="under30" onchange="applyFilters()"> Under 30 min</label>
+            <label class="sidebar-option"><input type="radio" name="time" value="over30" onchange="applyFilters()"> 30+ min</label>
+          </div>
+
+          <!-- Ad -->
+          <div class="ad-sidebar">
+            <div style="font-size:0.65rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Advertisement</div>
+            <!-- Google AdSense 160x600 -->
+            <div style="font-weight:600">160 × 600</div>
+            <div>Wide Skyscraper Ad</div>
+          </div>
+        </aside>
+
+        <!-- RECIPES GRID -->
+        <div>
+          <div class="sort-row">
+            <div class="results-count"><strong id="resultsCount">10</strong> recipes found</div>
+            <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+              <option value="default">Sort: Featured</option>
+              <option value="rating">Highest Rated</option>
+              <option value="cal-asc">Lowest Calories</option>
+              <option value="cal-desc">Highest Calories</option>
+              <option value="time">Quickest First</option>
+            </select>
+          </div>
+
+          <div class="recipes-grid" id="recipesGrid">
+            <!-- Populated by JS -->
+          </div>
+
+          <div class="pagination" id="pagination">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RECIPES = [
+      {id:1,title:"Green Goddess Buddha Bowl",cat:"healthy",emoji:"🥗",time:20,difficulty:"easy",cal:380,rating:4.9,reviews:234,desc:"Vibrant greens, quinoa, roasted chickpeas and tahini dressing.",tags:["vegan","gluten-free"]},
+      {id:2,title:"Avocado Toast with Poached Egg",cat:"breakfast",emoji:"🥑",time:12,difficulty:"easy",cal:320,rating:4.8,reviews:189,desc:"Sourdough, smashed avocado, poached egg, chili flakes.",tags:[]},
+      {id:3,title:"Lemon Herb Baked Salmon",cat:"dinner",emoji:"🐟",time:25,difficulty:"medium",cal:420,rating:4.9,reviews:312,desc:"Wild-caught salmon with lemon, herbs, and roasted asparagus.",tags:["gluten-free"]},
+      {id:4,title:"Chia Seed Overnight Oats",cat:"breakfast",emoji:"🌾",time:5,difficulty:"easy",cal:285,rating:4.7,reviews:156,desc:"Creamy oats with chia seeds, berries, and almond butter.",tags:["vegan"]},
+      {id:5,title:"Thai Peanut Noodle Bowl",cat:"lunch",emoji:"🍜",time:18,difficulty:"easy",cal:450,rating:4.8,reviews:278,desc:"Rice noodles with peanut sauce, edamame, and fresh herbs.",tags:["vegan"]},
+      {id:6,title:"Dark Chocolate Energy Balls",cat:"desserts",emoji:"🍫",time:15,difficulty:"easy",cal:95,rating:4.9,reviews:445,desc:"No-bake bites with oats, dates, cacao, and almond butter.",tags:["vegan","gluten-free"]},
+      {id:7,title:"Mediterranean Quinoa Salad",cat:"lunch",emoji:"🫙",time:15,difficulty:"easy",cal:310,rating:4.7,reviews:167,desc:"Quinoa, olives, feta, cucumber, tomato, lemon vinaigrette.",tags:["gluten-free"]},
+      {id:8,title:"Mango Turmeric Smoothie Bowl",cat:"breakfast",emoji:"🥭",time:8,difficulty:"easy",cal:340,rating:4.8,reviews:198,desc:"Golden bowl with mango, turmeric, coconut milk, granola.",tags:["vegan","gluten-free"]},
+      {id:9,title:"Zucchini Noodles Pesto",cat:"dinner",emoji:"🌿",time:20,difficulty:"easy",cal:280,rating:4.6,reviews:132,desc:"Spiralized zucchini with homemade basil pesto and pine nuts.",tags:["vegan","gluten-free","keto"]},
+      {id:10,title:"Black Bean Tacos",cat:"dinner",emoji:"🌮",time:22,difficulty:"easy",cal:360,rating:4.8,reviews:290,desc:"Crispy shells, spiced black beans, mango salsa, cilantro.",tags:["vegan"]},
+      {id:11,title:"Greek Yogurt Parfait",cat:"breakfast",emoji:"🫐",time:5,difficulty:"easy",cal:220,rating:4.7,reviews:180,desc:"Layers of yogurt, granola, honey, and fresh berries.",tags:[]},
+      {id:12,title:"Roasted Sweet Potato Bowl",cat:"healthy",emoji:"🍠",time:35,difficulty:"medium",cal:390,rating:4.6,reviews:145,desc:"Caramelized sweet potato, black beans, avocado, tahini.",tags:["vegan","gluten-free"]},
+      {id:13,title:"Chicken Caesar Wrap",cat:"lunch",emoji:"🫔",time:12,difficulty:"easy",cal:410,rating:4.5,reviews:201,desc:"Grilled chicken, romaine, parmesan, light Caesar dressing.",tags:[]},
+      {id:14,title:"Banana Nice Cream",cat:"desserts",emoji:"🍦",time:5,difficulty:"easy",cal:140,rating:4.8,reviews:320,desc:"2-ingredient frozen banana ice cream, any flavor.",tags:["vegan","gluten-free"]},
+      {id:15,title:"Shakshuka",cat:"breakfast",emoji:"🍳",time:25,difficulty:"medium",cal:290,rating:4.9,reviews:267,desc:"Eggs poached in spiced tomato sauce, fresh herbs, feta.",tags:["gluten-free"]},
+      {id:16,title:"Cauliflower Fried Rice",cat:"healthy",emoji:"🥦",time:18,difficulty:"easy",cal:245,rating:4.7,reviews:198,desc:"Low-carb cauliflower rice with vegetables and soy sauce.",tags:["gluten-free","keto"]},
+      {id:17,title:"Açaí Smoothie Bowl",cat:"breakfast",emoji:"🫐",time:8,difficulty:"easy",cal:380,rating:4.8,reviews:234,desc:"Rich açaí base topped with granola, fruits, and coconut.",tags:["vegan"]},
+      {id:18,title:"Tuscan White Bean Soup",cat:"dinner",emoji:"🍲",time:30,difficulty:"easy",cal:350,rating:4.7,reviews:156,desc:"Hearty beans, kale, garlic, and rosemary in broth.",tags:["vegan"]},
+    ];
+
+    const ITEMS_PER_PAGE = 9;
+    let currentPage = 1;
+    let currentCat = 'all';
+    let filteredRecipes = [...RECIPES];
+
+    function applyFilters() {
+      const query = document.getElementById('recipeSearch').value.toLowerCase().trim();
+      const maxCal = +document.getElementById('calRange').value;
+      const difficulties = [...document.querySelectorAll('input[type="checkbox"][value="easy"], input[type="checkbox"][value="medium"], input[type="checkbox"][value="hard"]')]
+        .filter(c => c.checked).map(c => c.value);
+      const dietary = [...document.querySelectorAll('input[type="checkbox"][value="vegan"], input[type="checkbox"][value="gluten-free"], input[type="checkbox"][value="keto"]')]
+        .filter(c => c.checked).map(c => c.value);
+      const timeFilter = document.querySelector('input[name="time"]:checked')?.value || 'all';
+      const sort = document.getElementById('sortSelect').value;
+
+      filteredRecipes = RECIPES.filter(r => {
+        if (currentCat !== 'all' && r.cat !== currentCat && !r.tags?.includes(currentCat)) return false;
+        if (query && !r.title.toLowerCase().includes(query) && !r.desc.toLowerCase().includes(query)) return false;
+        if (r.cal > maxCal) return false;
+        if (difficulties.length && !difficulties.includes(r.difficulty)) return false;
+        if (dietary.length && !dietary.every(d => r.tags?.includes(d))) return false;
+        if (timeFilter === 'under15' && r.time >= 15) return false;
+        if (timeFilter === 'under30' && r.time >= 30) return false;
+        if (timeFilter === 'over30' && r.time < 30) return false;
+        return true;
+      });
+
+      if (sort === 'rating') filteredRecipes.sort((a,b) => b.rating - a.rating);
+      else if (sort === 'cal-asc') filteredRecipes.sort((a,b) => a.cal - b.cal);
+      else if (sort === 'cal-desc') filteredRecipes.sort((a,b) => b.cal - a.cal);
+      else if (sort === 'time') filteredRecipes.sort((a,b) => a.time - b.time);
+
+      currentPage = 1;
+      renderRecipes();
+      renderPagination();
+    }
+
+    function renderRecipes() {
+      const grid = document.getElementById('recipesGrid');
+      document.getElementById('resultsCount').textContent = filteredRecipes.length;
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const page = filteredRecipes.slice(start, start + ITEMS_PER_PAGE);
+
+      if (!page.length) {
+        grid.innerHTML = `<div class="no-results" style="grid-column:1/-1">
+          <div class="no-results-icon">🔍</div>
+          <div class="no-results-title">No recipes found</div>
+          <p>Try adjusting your filters or search term.</p>
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = page.map(r => `
+        <article class="recipe-card" onclick="window.location='/recipes/detail.html?id=${r.id}'">
+          <div class="recipe-card-img-wrap">
+            <div class="recipe-card-img">${r.emoji}</div>
+            <div class="recipe-badge">${r.cat}</div>
+            <button class="recipe-save" onclick="event.stopPropagation()" title="Save">🤍</button>
+          </div>
+          <div class="recipe-card-body">
+            <div class="recipe-meta">
+              <span class="recipe-meta-item">⏱ ${r.time} min</span>
+              <span class="difficulty difficulty-${r.difficulty}">${r.difficulty}</span>
+              ${r.tags?.includes('vegan') ? '<span style="font-size:0.68rem;color:var(--leaf)">🌿 Vegan</span>' : ''}
+            </div>
+            <h2 class="recipe-title">${r.title}</h2>
+            <p class="recipe-desc">${r.desc}</p>
+          </div>
+          <div class="recipe-footer">
+            <div class="recipe-rating"><span class="stars">★★★★★</span> ${r.rating} (${r.reviews})</div>
+            <div class="recipe-calories">${r.cal} cal</div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function renderPagination() {
+      const total = Math.ceil(filteredRecipes.length / ITEMS_PER_PAGE);
+      const pg = document.getElementById('pagination');
+      if (total <= 1) { pg.innerHTML = ''; return; }
+      let html = '';
+      if (currentPage > 1) html += `<button class="page-btn" onclick="goToPage(${currentPage-1})">←</button>`;
+      for (let i = 1; i <= total; i++) {
+        html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
+      }
+      if (currentPage < total) html += `<button class="page-btn" onclick="goToPage(${currentPage+1})">→</button>`;
+      pg.innerHTML = html;
+    }
+
+    function goToPage(n) {
+      currentPage = n;
+      renderRecipes();
+      renderPagination();
+      window.scrollTo({top: 300, behavior:'smooth'});
+    }
+
+    function updateCalLabel(v) { document.getElementById('calLabel').textContent = v + ' cal'; }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // Category filter chips
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        currentCat = this.dataset.cat;
+        applyFilters();
+      });
+    });
+
+    // URL search param
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlSearch = urlParams.get('search');
+    const urlCat = urlParams.get('cat');
+    if (urlSearch) { document.getElementById('recipeSearch').value = urlSearch; }
+    if (urlCat) {
+      currentCat = urlCat;
+      document.querySelectorAll('.filter-chip').forEach(c => {
+        c.classList.toggle('active', c.dataset.cat === urlCat);
+      });
+    }
+
+    // Dark mode
+    const html = document.documentElement;
+    const saved = localStorage.getItem('fb_theme') || 'light';
+    html.setAttribute('data-theme', saved);
+    const tt = document.getElementById('themeToggle');
+    tt.textContent = saved === 'dark' ? '☀️' : '🌙';
+    tt.addEventListener('click', () => {
+      const n = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', n);
+      tt.textContent = n === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('fb_theme', n);
+    });
+
+    // Init
+    applyFilters();
+  </script>
+</body>
+</html>

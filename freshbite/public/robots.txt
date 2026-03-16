@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block admin from indexing
+Disallow: /admin/
+Disallow: /auth/
+
+# Block Netlify function endpoints
+Disallow: /.netlify/
+
+Sitemap: https://freshbite.netlify.app/sitemap.xml

@@ -1,0 +1,12 @@
+{
+  "name": "freshbite",
+  "version": "1.0.0",
+  "description": "FreshBite - Healthy Recipes & Juice Lab",
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.37.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

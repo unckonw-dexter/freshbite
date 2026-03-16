@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juice Lab – Build Your Perfect Blend | FreshBite</title>
+  <meta name="description" content="Build your perfect juice or smoothie blend. Mix fruits, veggies, and superfoods with our interactive Juice Lab. See nutrition instantly." />
+  <link rel="canonical" href="https://freshbite.netlify.app/juice-builder/" />
+  <meta property="og:title" content="Juice Lab | FreshBite" />
+  <meta property="og:description" content="Build your perfect juice blend with real-time nutrition tracking." />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Juice Lab","url":"https://freshbite.netlify.app/juice-builder/","description":"Interactive juice and smoothie builder with nutrition tracking"}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--forest:#1c3a2a;--leaf:#2d6a4f;--lime:#74c69d;--mint:#b7e4c7;--cream:#f8f4ef;--cream-2:#f0ebe3;--charcoal:#1a1a1a;--muted:#6b7280;--white:#ffffff;--bg:var(--cream);--bg-2:var(--cream-2);--text:var(--charcoal);--text-sub:var(--muted);--border:rgba(28,58,42,0.12);--card-bg:var(--white);--nav-bg:rgba(248,244,239,0.9);--font-display:'Cormorant Garamond',serif;--font-body:'DM Sans',sans-serif;--r-sm:8px;--r-md:16px;--r-lg:24px;--r-xl:40px;--shadow-md:0 4px 20px rgba(28,58,42,0.12);--shadow-lg:0 12px 48px rgba(28,58,42,0.16);--transition:0.3s cubic-bezier(0.4,0,0.2,1)}
+    [data-theme="dark"]{--bg:#0d1f16;--bg-2:#111e18;--text:#e8f5ed;--text-sub:#8dab97;--border:rgba(116,198,157,0.15);--card-bg:#162318;--nav-bg:rgba(13,31,22,0.92)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background var(--transition),color var(--transition)}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font-family:var(--font-body)}
+    ul{list-style:none}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;padding:0 32px}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;font-weight:600;color:var(--forest)}
+    [data-theme="dark"] .nav-logo{color:var(--lime)}
+    .nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--leaf),var(--lime));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{font-size:0.875rem;font-weight:500;color:var(--text-sub);transition:color var(--transition)}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:100px;font-size:0.875rem;font-weight:500;border:none;transition:all var(--transition);cursor:pointer}
+    .btn-primary{background:var(--forest);color:white}
+    .btn-primary:hover{background:var(--leaf)}
+    .btn-lime{background:var(--lime);color:var(--forest);font-weight:600}
+    .btn-lime:hover{background:var(--mint)}
+    .btn-outline{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+    [data-theme="dark"] .btn-outline{color:var(--lime);border-color:var(--lime)}
+    .btn-outline:hover{background:var(--forest);color:white}
+    .theme-toggle{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all var(--transition);color:var(--text)}
+    .theme-toggle:hover{background:var(--bg-2)}
+    @media(max-width:768px){.nav-links{display:none}}
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 24px}
+
+    .page-hero{padding:120px 0 56px;background:var(--forest);position:relative;overflow:hidden}
+    .page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(116,198,157,0.2),transparent),linear-gradient(135deg,#081510,#1c3a2a)}
+    .page-hero-inner{position:relative;z-index:1;text-align:center}
+    .page-eyebrow{font-size:0.7rem;font-weight:600;letter-spacing:0.25em;text-transform:uppercase;color:var(--lime);margin-bottom:12px}
+    .page-title{font-family:var(--font-display);font-size:clamp(3rem,6vw,6rem);font-weight:300;color:white;line-height:1.02;margin-bottom:16px}
+    .page-title em{font-style:italic;color:var(--lime)}
+    .page-subtitle{color:rgba(255,255,255,0.55);font-size:1rem;max-width:500px;margin:0 auto}
+
+    /* MAIN LAYOUT */
+    .lab-section{padding:48px 0 80px}
+    .lab-layout{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+    @media(max-width:1024px){.lab-layout{grid-template-columns:1fr}}
+
+    /* INGREDIENT PICKER */
+    .picker-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-xl);padding:32px}
+    .picker-title{font-family:var(--font-display);font-size:2rem;font-weight:400;margin-bottom:6px}
+    .picker-sub{font-size:0.85rem;color:var(--text-sub);margin-bottom:24px}
+    .category-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+    .cat-tab{padding:7px 16px;border-radius:100px;font-size:0.8rem;font-weight:500;border:1.5px solid var(--border);background:transparent;color:var(--text-sub);cursor:pointer;transition:all var(--transition)}
+    .cat-tab:hover{border-color:var(--lime);color:var(--text)}
+    .cat-tab.active{background:var(--forest);border-color:var(--forest);color:white}
+    [data-theme="dark"] .cat-tab.active{background:var(--leaf);border-color:var(--leaf)}
+    .ingredients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;min-height:200px}
+    .ingredient-tile{background:var(--bg-2);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:16px 10px;text-align:center;cursor:pointer;transition:all var(--transition);position:relative;user-select:none}
+    .ingredient-tile:hover{border-color:var(--lime);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+    .ingredient-tile.selected{border-color:var(--leaf);background:rgba(116,198,157,0.12)}
+    .ingredient-tile.selected::after{content:'✓';position:absolute;top:6px;right:8px;font-size:0.7rem;color:var(--leaf);font-weight:700}
+    .tile-emoji{font-size:2.2rem;margin-bottom:6px}
+    .tile-name{font-size:0.75rem;font-weight:500;color:var(--text)}
+    .tile-cal{font-size:0.65rem;color:var(--text-sub)}
+
+    /* PRESETS */
+    .presets-row{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+    .preset-pill{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:100px;background:var(--bg-2);border:1.5px solid var(--border);font-size:0.78rem;cursor:pointer;transition:all var(--transition)}
+    .preset-pill:hover{border-color:var(--lime)}
+
+    /* BLENDER PANEL */
+    .blender-panel{position:sticky;top:90px}
+    .blender-card{background:linear-gradient(160deg,var(--forest),#0a2218);border-radius:var(--r-xl);padding:32px;color:white;margin-bottom:20px}
+    .blender-title{font-family:var(--font-display);font-size:1.5rem;color:var(--lime);margin-bottom:4px}
+    .blender-sub{font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:20px}
+    .blender-visual{width:120px;height:160px;margin:0 auto 20px;position:relative}
+    .blender-body{width:100%;height:100%;background:rgba(116,198,157,0.1);border:2px solid rgba(116,198,157,0.25);border-radius:8px 8px 20px 20px;display:flex;align-items:flex-end;overflow:hidden;position:relative}
+    .blender-fill{width:100%;background:linear-gradient(180deg,rgba(116,198,157,0.6),rgba(45,106,79,0.8));transition:height 0.8s cubic-bezier(0.4,0,0.2,1);border-radius:0 0 18px 18px}
+    .blender-emoji-stack{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;padding:8px;font-size:1.4rem}
+    .blend-name-input{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r-sm);padding:8px 12px;color:white;font-family:var(--font-body);font-size:0.875rem;outline:none;margin-bottom:12px}
+    .blend-name-input::placeholder{color:rgba(255,255,255,0.35)}
+    .blend-btn{width:100%;padding:14px;border-radius:var(--r-md);background:var(--lime);color:var(--forest);font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:all var(--transition);margin-bottom:8px}
+    .blend-btn:hover{background:var(--mint)}
+    .blend-clear{width:100%;padding:10px;border-radius:var(--r-md);background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);font-size:0.8rem;border:none;cursor:pointer;transition:all var(--transition)}
+    .blend-clear:hover{background:rgba(255,255,255,0.15)}
+
+    /* CURRENT BLEND */
+    .current-blend{margin-bottom:20px}
+    .blend-items{display:flex;flex-direction:column;gap:8px;min-height:60px}
+    .blend-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);border-radius:var(--r-sm);padding:8px 12px}
+    .blend-item-emoji{font-size:1.2rem}
+    .blend-item-name{flex:1;font-size:0.82rem}
+    .blend-item-qty{display:flex;align-items:center;gap:6px}
+    .qty-btn{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+    .qty-btn:hover{background:rgba(255,255,255,0.15)}
+    .qty-num{font-size:0.8rem;min-width:16px;text-align:center;color:var(--lime)}
+    .blend-item-remove{width:20px;height:20px;border-radius:50%;border:none;background:rgba(239,68,68,0.2);color:#f87171;font-size:0.7rem;cursor:pointer;transition:all var(--transition)}
+    .blend-item-remove:hover{background:rgba(239,68,68,0.4)}
+    .empty-blender{text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:0.85rem}
+
+    /* NUTRITION PANEL */
+    .nutrition-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px}
+    .nut-title{font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-sub);margin-bottom:16px}
+    .nut-big{font-family:var(--font-display);font-size:3rem;color:var(--leaf);line-height:1}
+    .nut-big-label{font-size:0.75rem;color:var(--text-sub);margin-bottom:16px}
+    .nut-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.85rem}
+    .nut-row:last-child{border-bottom:none}
+    .nut-bar{margin:12px 0}
+    .nut-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:0.78rem}
+    .nut-bar-track{flex:1;height:5px;background:var(--bg-2);border-radius:3px;overflow:hidden}
+    .nut-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+
+    /* SAVED BLENDS */
+    .saved-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;margin-top:20px}
+    .saved-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .saved-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg-2);border-radius:var(--r-md);cursor:pointer;transition:all var(--transition)}
+    .saved-item:hover{background:rgba(116,198,157,0.1)}
+    .saved-emojis{font-size:1.1rem}
+    .saved-info{flex:1}
+    .saved-name{font-size:0.875rem;font-weight:500}
+    .saved-meta{font-size:0.72rem;color:var(--text-sub)}
+    .saved-cal{font-size:0.8rem;font-weight:600;color:var(--leaf)}
+
+    /* RESULT MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--card-bg);border-radius:var(--r-xl);padding:40px;max-width:480px;width:90%;text-align:center;max-height:90vh;overflow-y:auto}
+    .modal-emoji{font-size:4rem;margin-bottom:16px}
+    .modal-title{font-family:var(--font-display);font-size:2.5rem;margin-bottom:8px}
+    .modal-sub{font-size:0.9rem;color:var(--text-sub);margin-bottom:24px}
+    .modal-nutrition{background:var(--bg-2);border-radius:var(--r-lg);padding:20px;margin-bottom:20px}
+    .modal-nut-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+    .modal-nut-item{text-align:center}
+    .modal-nut-num{font-family:var(--font-display);font-size:1.6rem;color:var(--leaf)}
+    .modal-nut-label{font-size:0.7rem;color:var(--text-sub)}
+    .modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><div class="nav-logo-icon">🌿</div>FreshBite</a>
+      <ul class="nav-links">
+        <li><a href="/recipes/">Recipes</a></li>
+        <li><a href="/juice-builder/" class="active">Juice Lab</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/#ai-generator">AI Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+        <a href="/auth/login.html" class="btn btn-outline" style="padding:9px 20px;">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="container page-hero-inner">
+      <div class="page-eyebrow">Interactive Juice Lab</div>
+      <h1 class="page-title">Build Your Perfect<br><em>Blend</em></h1>
+      <p class="page-subtitle">Mix and match 40+ fresh ingredients. Watch nutrition update live. Save your creations.</p>
+    </div>
+  </div>
+
+  <div class="lab-section">
+    <div class="container">
+      <div class="lab-layout">
+        <!-- LEFT: INGREDIENT PICKER -->
+        <div>
+          <div class="picker-card">
+            <h2 class="picker-title">Choose Ingredients</h2>
+            <p class="picker-sub">Tap to add to your blend. Each ingredient = 1 serving.</p>
+            <div class="category-tabs" id="catTabs">
+              <button class="cat-tab active" data-cat="all">✨ All</button>
+              <button class="cat-tab" data-cat="fruits">🍓 Fruits</button>
+              <button class="cat-tab" data-cat="veggies">🥬 Veggies</button>
+              <button class="cat-tab" data-cat="liquids">💧 Liquids</button>
+              <button class="cat-tab" data-cat="superfoods">⚡ Superfoods</button>
+              <button class="cat-tab" data-cat="extras">🧊 Extras</button>
+            </div>
+            <div class="ingredients-grid" id="ingredientsGrid"></div>
+            <div style="margin-top:20px;">
+              <p style="font-size:0.75rem;color:var(--text-sub);margin-bottom:10px;">✨ Quick Presets</p>
+              <div class="presets-row" id="presetsRow"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: BLENDER + NUTRITION -->
+        <div class="blender-panel">
+          <!-- Blender -->
+          <div class="blender-card">
+            <div class="blender-title">🥤 Your Blend</div>
+            <div class="blender-sub">Add ingredients to build your blend</div>
+            <div class="blender-visual">
+              <div class="blender-body">
+                <div class="blender-fill" id="blenderFill" style="height:0%"></div>
+                <div class="blender-emoji-stack" id="blenderEmojiStack"></div>
+              </div>
+            </div>
+            <div class="current-blend">
+              <div class="blend-items" id="blendItems">
+                <div class="empty-blender" id="emptyMsg">🫙 Add ingredients above</div>
+              </div>
+            </div>
+            <input type="text" class="blend-name-input" id="blendName" placeholder="Name your blend…" />
+            <button class="blend-btn" onclick="blendIt()">🌀 Blend It!</button>
+            <button class="blend-clear" onclick="clearBlend()">✕ Clear All</button>
+          </div>
+
+          <!-- Nutrition -->
+          <div class="nutrition-card">
+            <div class="nut-title">Live Nutrition</div>
+            <div class="nut-big" id="nutCal">0</div>
+            <div class="nut-big-label">calories per serving</div>
+            <div class="nut-row"><span>Protein</span><span id="nutProtein">0g</span></div>
+            <div class="nut-row"><span>Carbs</span><span id="nutCarbs">0g</span></div>
+            <div class="nut-row"><span>Fat</span><span id="nutFat">0g</span></div>
+            <div class="nut-row"><span>Fiber</span><span id="nutFiber">0g</span></div>
+            <div class="nut-row"><span>Vitamin C</span><span id="nutVitC">0%</span></div>
+            <div class="nut-bar" style="margin-top:12px">
+              <div class="nut-bar-row"><span style="min-width:60px;color:var(--leaf)">Protein</span><div class="nut-bar-track"><div class="nut-bar-fill" id="barProtein" style="width:0%;background:linear-gradient(90deg,var(--leaf),var(--lime))"></div></div></div>
+              <div class="nut-bar-row"><span style="min-width:60px;color:#f59e0b">Carbs</span><div class="nut-bar-track"><div class="nut-bar-fill" id="barCarbs" style="width:0%;background:linear-gradient(90deg,#d97706,#fcd34d)"></div></div></div>
+              <div class="nut-bar-row"><span style="min-width:60px;color:#ef4444">Fat</span><div class="nut-bar-track"><div class="nut-bar-fill" id="barFat" style="width:0%;background:linear-gradient(90deg,#dc2626,#f87171)"></div></div></div>
+            </div>
+          </div>
+
+          <!-- Saved Blends -->
+          <div class="saved-card">
+            <div class="nut-title">Saved Blends</div>
+            <div class="saved-list" id="savedList">
+              <p style="font-size:0.8rem;color:var(--text-sub);text-align:center;padding:12px 0">No saved blends yet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT MODAL -->
+  <div class="modal-overlay" id="blendModal">
+    <div class="modal">
+      <div class="modal-emoji" id="modalEmoji">🥤</div>
+      <h2 class="modal-title" id="modalTitle">Your Blend</h2>
+      <p class="modal-sub" id="modalSub">Ready to enjoy!</p>
+      <div class="modal-nutrition">
+        <p style="font-size:0.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-sub)">Nutrition Per Serving</p>
+        <div class="modal-nut-grid">
+          <div class="modal-nut-item"><div class="modal-nut-num" id="mCal">0</div><div class="modal-nut-label">Calories</div></div>
+          <div class="modal-nut-item"><div class="modal-nut-num" id="mProtein">0g</div><div class="modal-nut-label">Protein</div></div>
+          <div class="modal-nut-item"><div class="modal-nut-num" id="mCarbs">0g</div><div class="modal-nut-label">Carbs</div></div>
+          <div class="modal-nut-item"><div class="modal-nut-num" id="mFiber">0g</div><div class="modal-nut-label">Fiber</div></div>
+          <div class="modal-nut-item"><div class="modal-nut-num" id="mVitC">0%</div><div class="modal-nut-label">Vit. C</div></div>
+          <div class="modal-nut-item"><div class="modal-nut-num" id="mFat">0g</div><div class="modal-nut-label">Fat</div></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-lime" onclick="saveBlend()">💾 Save Blend</button>
+        <button class="btn btn-outline" onclick="shareBlend()">📤 Share</button>
+        <button class="btn" style="background:var(--bg-2)" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const INGREDIENTS = [
+      // Fruits
+      {id:'apple',name:'Apple',emoji:'🍎',cat:'fruits',cal:52,protein:0.3,carbs:14,fat:0.2,fiber:2.4,vitC:8},
+      {id:'banana',name:'Banana',emoji:'🍌',cat:'fruits',cal:89,protein:1.1,carbs:23,fat:0.3,fiber:2.6,vitC:15},
+      {id:'strawberry',name:'Strawberry',emoji:'🍓',cat:'fruits',cal:32,protein:0.7,carbs:7.7,fat:0.3,fiber:2,vitC:98},
+      {id:'mango',name:'Mango',emoji:'🥭',cat:'fruits',cal:60,protein:0.8,carbs:15,fat:0.4,fiber:1.6,vitC:44},
+      {id:'pineapple',name:'Pineapple',emoji:'🍍',cat:'fruits',cal:50,protein:0.5,carbs:13,fat:0.1,fiber:1.4,vitC:79},
+      {id:'blueberry',name:'Blueberry',emoji:'🫐',cat:'fruits',cal:57,protein:0.7,carbs:14,fat:0.3,fiber:2.4,vitC:16},
+      {id:'orange',name:'Orange',emoji:'🍊',cat:'fruits',cal:47,protein:0.9,carbs:12,fat:0.1,fiber:2.4,vitC:88},
+      {id:'watermelon',name:'Watermelon',emoji:'🍉',cat:'fruits',cal:30,protein:0.6,carbs:7.6,fat:0.2,fiber:0.4,vitC:13},
+      {id:'lemon',name:'Lemon',emoji:'🍋',cat:'fruits',cal:29,protein:1.1,carbs:9.3,fat:0.3,fiber:2.8,vitC:88},
+      {id:'avocado',name:'Avocado',emoji:'🥑',cat:'fruits',cal:160,protein:2,carbs:9,fat:15,fiber:7,vitC:10},
+      // Veggies
+      {id:'spinach',name:'Spinach',emoji:'🥬',cat:'veggies',cal:23,protein:2.9,carbs:3.6,fat:0.4,fiber:2.2,vitC:47},
+      {id:'kale',name:'Kale',emoji:'🥦',cat:'veggies',cal:49,protein:4.3,carbs:8.8,fat:0.9,fiber:3.6,vitC:200},
+      {id:'cucumber',name:'Cucumber',emoji:'🥒',cat:'veggies',cal:15,protein:0.7,carbs:3.6,fat:0.1,fiber:0.5,vitC:4},
+      {id:'carrot',name:'Carrot',emoji:'🥕',cat:'veggies',cal:41,protein:0.9,carbs:10,fat:0.2,fiber:2.8,vitC:6},
+      {id:'beet',name:'Beet',emoji:'🫐',cat:'veggies',cal:43,protein:1.6,carbs:10,fat:0.2,fiber:2.8,vitC:5},
+      {id:'celery',name:'Celery',emoji:'🌿',cat:'veggies',cal:16,protein:0.7,carbs:3,fat:0.2,fiber:1.6,vitC:3},
+      {id:'ginger',name:'Ginger',emoji:'🫚',cat:'veggies',cal:20,protein:0.4,carbs:4.5,fat:0.2,fiber:0.5,vitC:2},
+      // Liquids
+      {id:'almond-milk',name:'Almond Milk',emoji:'🥛',cat:'liquids',cal:30,protein:1,carbs:1,fat:2.5,fiber:0,vitC:0},
+      {id:'coconut-water',name:'Coconut Water',emoji:'🥥',cat:'liquids',cal:19,protein:0.7,carbs:3.7,fat:0.2,fiber:1,vitC:2},
+      {id:'oat-milk',name:'Oat Milk',emoji:'🫙',cat:'liquids',cal:47,protein:1.2,carbs:9,fat:1,fiber:0.6,vitC:0},
+      {id:'green-tea',name:'Green Tea',emoji:'🍵',cat:'liquids',cal:2,protein:0,carbs:0,fat:0,fiber:0,vitC:0},
+      {id:'water',name:'Water',emoji:'💧',cat:'liquids',cal:0,protein:0,carbs:0,fat:0,fiber:0,vitC:0},
+      // Superfoods
+      {id:'chia',name:'Chia Seeds',emoji:'🌱',cat:'superfoods',cal:58,protein:2,carbs:5,fat:3.7,fiber:5,vitC:0},
+      {id:'flax',name:'Flax Seeds',emoji:'✨',cat:'superfoods',cal:55,protein:1.9,carbs:3,fat:4.3,fiber:2.8,vitC:0},
+      {id:'spirulina',name:'Spirulina',emoji:'💚',cat:'superfoods',cal:20,protein:4,carbs:1.7,fat:0.5,fiber:0.4,vitC:2},
+      {id:'acai',name:'Açaí',emoji:'🍇',cat:'superfoods',cal:70,protein:1.4,carbs:4,fat:5,fiber:2,vitC:0},
+      {id:'maca',name:'Maca Powder',emoji:'⚡',cat:'superfoods',cal:25,protein:0.6,carbs:5.5,fat:0.3,fiber:0.8,vitC:0},
+      {id:'turmeric',name:'Turmeric',emoji:'🟡',cat:'superfoods',cal:9,protein:0.3,carbs:2,fat:0.1,fiber:0.7,vitC:0},
+      // Extras
+      {id:'honey',name:'Honey',emoji:'🍯',cat:'extras',cal:64,protein:0.1,carbs:17,fat:0,fiber:0,vitC:0},
+      {id:'almond-butter',name:'Almond Butter',emoji:'🥜',cat:'extras',cal:98,protein:3.4,carbs:3,fat:9,fiber:1.6,vitC:0},
+      {id:'greek-yogurt',name:'Greek Yogurt',emoji:'🍦',cat:'extras',cal:59,protein:10,carbs:3.6,fat:0.4,fiber:0,vitC:0},
+      {id:'oats',name:'Rolled Oats',emoji:'🌾',cat:'extras',cal:77,protein:2.6,carbs:14,fat:1.4,fiber:2,vitC:0},
+      {id:'ice',name:'Ice',emoji:'🧊',cat:'extras',cal:0,protein:0,carbs:0,fat:0,fiber:0,vitC:0},
+      {id:'dates',name:'Medjool Date',emoji:'🌴',cat:'extras',cal:66,protein:0.4,carbs:18,fat:0,fiber:1.6,vitC:0},
+    ];
+
+    const PRESETS = [
+      {name:'Green Power',emoji:'💚',ids:['spinach','kale','cucumber','lemon','ginger','green-tea']},
+      {name:'Berry Boost',emoji:'🍓',ids:['strawberry','blueberry','banana','almond-milk','chia']},
+      {name:'Tropical Glow',emoji:'🌴',ids:['mango','pineapple','coconut-water','turmeric']},
+      {name:'Protein Pack',emoji:'💪',ids:['banana','greek-yogurt','almond-butter','oat-milk','chia']},
+      {name:'Detox Reset',emoji:'✨',ids:['spinach','cucumber','lemon','ginger','spirulina','water']},
+    ];
+
+    let currentBlend = {}; // id -> qty
+    let currentCat = 'all';
+    let savedBlends = JSON.parse(localStorage.getItem('fb_blends') || '[]');
+
+    function renderIngredients() {
+      const grid = document.getElementById('ingredientsGrid');
+      const filtered = currentCat === 'all' ? INGREDIENTS : INGREDIENTS.filter(i => i.cat === currentCat);
+      grid.innerHTML = filtered.map(ing => `
+        <div class="ingredient-tile ${currentBlend[ing.id] ? 'selected' : ''}" onclick="toggleIngredient('${ing.id}')">
+          <div class="tile-emoji">${ing.emoji}</div>
+          <div class="tile-name">${ing.name}</div>
+          <div class="tile-cal">${ing.cal} cal</div>
+          ${currentBlend[ing.id] ? `<div style="position:absolute;bottom:6px;right:8px;font-size:0.65rem;font-weight:700;color:var(--leaf)">×${currentBlend[ing.id]}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function renderPresets() {
+      const row = document.getElementById('presetsRow');
+      row.innerHTML = PRESETS.map(p => `
+        <button class="preset-pill" onclick="loadPreset('${p.name}')">
+          ${p.emoji} ${p.name}
+        </button>
+      `).join('');
+    }
+
+    function toggleIngredient(id) {
+      if (currentBlend[id]) {
+        delete currentBlend[id];
+      } else {
+        currentBlend[id] = 1;
+      }
+      renderIngredients();
+      renderBlend();
+      updateNutrition();
+    }
+
+    function renderBlend() {
+      const container = document.getElementById('blendItems');
+      const emptyMsg = document.getElementById('emptyMsg');
+      const items = Object.entries(currentBlend);
+
+      if (!items.length) {
+        container.innerHTML = '<div class="empty-blender" id="emptyMsg">🫙 Add ingredients above</div>';
+        document.getElementById('blenderFill').style.height = '0%';
+        document.getElementById('blenderEmojiStack').innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = items.map(([id, qty]) => {
+        const ing = INGREDIENTS.find(i => i.id === id);
+        return `
+          <div class="blend-item">
+            <span class="blend-item-emoji">${ing.emoji}</span>
+            <span class="blend-item-name">${ing.name}</span>
+            <div class="blend-item-qty">
+              <button class="qty-btn" onclick="adjustQty('${id}',-1)">−</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="adjustQty('${id}',1)">+</button>
+            </div>
+            <button class="blend-item-remove" onclick="removeItem('${id}')">✕</button>
+          </div>
+        `;
+      }).join('');
+
+      // Update blender visual
+      const fillPct = Math.min(items.length * 15, 90);
+      document.getElementById('blenderFill').style.height = fillPct + '%';
+      document.getElementById('blenderEmojiStack').innerHTML = items.slice(0,6).map(([id]) => {
+        const ing = INGREDIENTS.find(i => i.id === id);
+        return `<span>${ing.emoji}</span>`;
+      }).join('');
+    }
+
+    function adjustQty(id, delta) {
+      const newQty = (currentBlend[id] || 0) + delta;
+      if (newQty <= 0) { delete currentBlend[id]; }
+      else { currentBlend[id] = Math.min(newQty, 5); }
+      renderIngredients();
+      renderBlend();
+      updateNutrition();
+    }
+
+    function removeItem(id) {
+      delete currentBlend[id];
+      renderIngredients();
+      renderBlend();
+      updateNutrition();
+    }
+
+    function clearBlend() {
+      currentBlend = {};
+      document.getElementById('blendName').value = '';
+      renderIngredients();
+      renderBlend();
+      updateNutrition();
+    }
+
+    function updateNutrition() {
+      let totals = {cal:0,protein:0,carbs:0,fat:0,fiber:0,vitC:0};
+      Object.entries(currentBlend).forEach(([id,qty]) => {
+        const ing = INGREDIENTS.find(i => i.id === id);
+        if (ing) {
+          totals.cal += ing.cal * qty;
+          totals.protein += ing.protein * qty;
+          totals.carbs += ing.carbs * qty;
+          totals.fat += ing.fat * qty;
+          totals.fiber += ing.fiber * qty;
+          totals.vitC += ing.vitC * qty;
+        }
+      });
+      document.getElementById('nutCal').textContent = Math.round(totals.cal);
+      document.getElementById('nutProtein').textContent = totals.protein.toFixed(1) + 'g';
+      document.getElementById('nutCarbs').textContent = totals.carbs.toFixed(1) + 'g';
+      document.getElementById('nutFat').textContent = totals.fat.toFixed(1) + 'g';
+      document.getElementById('nutFiber').textContent = totals.fiber.toFixed(1) + 'g';
+      document.getElementById('nutVitC').textContent = Math.min(Math.round(totals.vitC), 999) + '%';
+      document.getElementById('barProtein').style.width = Math.min(totals.protein/30*100,100) + '%';
+      document.getElementById('barCarbs').style.width = Math.min(totals.carbs/60*100,100) + '%';
+      document.getElementById('barFat').style.width = Math.min(totals.fat/20*100,100) + '%';
+      return totals;
+    }
+
+    function blendIt() {
+      if (!Object.keys(currentBlend).length) {
+        alert('Add some ingredients first!');
+        return;
+      }
+      const totals = updateNutrition();
+      const name = document.getElementById('blendName').value || 'My Blend';
+      const emojis = Object.keys(currentBlend).slice(0,4).map(id => INGREDIENTS.find(i=>i.id===id)?.emoji).join('');
+
+      document.getElementById('modalEmoji').textContent = emojis || '🥤';
+      document.getElementById('modalTitle').textContent = name;
+      document.getElementById('modalSub').textContent = `${Object.keys(currentBlend).length} ingredients · Ready to enjoy!`;
+      document.getElementById('mCal').textContent = Math.round(totals.cal);
+      document.getElementById('mProtein').textContent = totals.protein.toFixed(1) + 'g';
+      document.getElementById('mCarbs').textContent = totals.carbs.toFixed(1) + 'g';
+      document.getElementById('mFiber').textContent = totals.fiber.toFixed(1) + 'g';
+      document.getElementById('mVitC').textContent = Math.min(Math.round(totals.vitC),999) + '%';
+      document.getElementById('mFat').textContent = totals.fat.toFixed(1) + 'g';
+      document.getElementById('blendModal').classList.add('open');
+    }
+
+    function saveBlend() {
+      const name = document.getElementById('blendName').value || 'My Blend';
+      const totals = updateNutrition();
+      const emojis = Object.keys(currentBlend).slice(0,4).map(id => INGREDIENTS.find(i=>i.id===id)?.emoji).join('');
+      const blend = {
+        id: Date.now(),
+        name,
+        emojis,
+        ingredients: {...currentBlend},
+        cal: Math.round(totals.cal),
+        protein: totals.protein.toFixed(1),
+      };
+      savedBlends.unshift(blend);
+      if (savedBlends.length > 10) savedBlends.pop();
+      localStorage.setItem('fb_blends', JSON.stringify(savedBlends));
+      renderSaved();
+      closeModal();
+      alert('✅ Blend saved!');
+    }
+
+    function loadPreset(name) {
+      const preset = PRESETS.find(p => p.name === name);
+      if (!preset) return;
+      clearBlend();
+      preset.ids.forEach(id => { currentBlend[id] = 1; });
+      document.getElementById('blendName').value = preset.name;
+      renderIngredients();
+      renderBlend();
+      updateNutrition();
+    }
+
+    function renderSaved() {
+      const list = document.getElementById('savedList');
+      if (!savedBlends.length) {
+        list.innerHTML = '<p style="font-size:0.8rem;color:var(--text-sub);text-align:center;padding:12px 0">No saved blends yet</p>';
+        return;
+      }
+      list.innerHTML = savedBlends.map(b => `
+        <div class="saved-item" onclick="loadSaved(${b.id})">
+          <span class="saved-emojis">${b.emojis}</span>
+          <div class="saved-info">
+            <div class="saved-name">${b.name}</div>
+            <div class="saved-meta">${Object.keys(b.ingredients).length} ingredients</div>
+          </div>
+          <span class="saved-cal">${b.cal} cal</span>
+        </div>
+      `).join('');
+    }
+
+    function loadSaved(id) {
+      const blend = savedBlends.find(b => b.id === id);
+      if (!blend) return;
+      clearBlend();
+      Object.assign(currentBlend, blend.ingredients);
+      document.getElementById('blendName').value = blend.name;
+      renderIngredients();
+      renderBlend();
+      updateNutrition();
+    }
+
+    function shareBlend() {
+      const name = document.getElementById('blendName').value || 'My Blend';
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({title: name + ' - FreshBite Juice Lab', url});
+      } else {
+        navigator.clipboard.writeText(url).then(() => alert('Link copied!'));
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('blendModal').classList.remove('open');
+    }
+
+    // Category tabs
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        currentCat = this.dataset.cat;
+        renderIngredients();
+      });
+    });
+
+    // Modal close on overlay click
+    document.getElementById('blendModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // Dark mode
+    const html = document.documentElement;
+    const saved = localStorage.getItem('fb_theme') || 'light';
+    html.setAttribute('data-theme', saved);
+    const tt = document.getElementById('themeToggle');
+    tt.textContent = saved === 'dark' ? '☀️' : '🌙';
+    tt.addEventListener('click', () => {
+      const n = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', n);
+      tt.textContent = n === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('fb_theme', n);
+    });
+
+    // Init
+    renderIngredients();
+    renderPresets();
+    renderSaved();
+  </script>
+</body>
+</html>

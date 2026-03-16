@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In | FreshBite</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root{--forest:#1c3a2a;--leaf:#2d6a4f;--lime:#74c69d;--mint:#b7e4c7;--cream:#f8f4ef;--cream-2:#f0ebe3;--charcoal:#1a1a1a;--muted:#6b7280;--white:#ffffff;--bg:var(--cream);--bg-2:var(--cream-2);--text:var(--charcoal);--text-sub:var(--muted);--border:rgba(28,58,42,0.12);--card-bg:var(--white);--font-display:'Cormorant Garamond',serif;--font-body:'DM Sans',sans-serif;--r-md:16px;--r-lg:24px;--r-xl:40px;--transition:0.3s cubic-bezier(0.4,0,0.2,1)}
+    [data-theme="dark"]{--bg:#0d1f16;--bg-2:#111e18;--text:#e8f5ed;--text-sub:#8dab97;--border:rgba(116,198,157,0.15);--card-bg:#162318}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;transition:background var(--transition),color var(--transition)}
+    a{color:inherit;text-decoration:none}
+    .auth-page{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+    @media(max-width:768px){.auth-page{grid-template-columns:1fr}}
+    .auth-visual{background:linear-gradient(160deg,#0a1f14,#1c3a2a);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:48px}
+    @media(max-width:768px){.auth-visual{display:none}}
+    .auth-visual-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(116,198,157,0.1),transparent)}
+    .auth-visual-content{position:relative;z-index:1;text-align:center}
+    .auth-visual-logo{font-family:var(--font-display);font-size:2rem;color:white;margin-bottom:8px;display:flex;align-items:center;gap:10px;justify-content:center}
+    .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--leaf),var(--lime));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+    .auth-visual-tagline{color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:48px}
+    .visual-features{display:flex;flex-direction:column;gap:16px;text-align:left}
+    .visual-feature{display:flex;gap:12px;align-items:flex-start}
+    .feature-check{width:28px;height:28px;border-radius:50%;background:rgba(116,198,157,0.2);border:1px solid rgba(116,198,157,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:var(--lime);flex-shrink:0;margin-top:2px}
+    .feature-text{color:rgba(255,255,255,0.7);font-size:0.875rem;line-height:1.5}
+    .feature-text strong{color:white}
+    .auth-form-side{display:flex;align-items:center;justify-content:center;padding:32px 24px}
+    .auth-form-wrap{width:100%;max-width:440px}
+    .auth-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}
+    .auth-logo{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--forest)}
+    [data-theme="dark"] .auth-logo{color:var(--lime)}
+    .auth-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--leaf),var(--lime));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+    .theme-toggle{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all var(--transition)}
+    .form-title{font-family:var(--font-display);font-size:3rem;font-weight:300;margin-bottom:6px}
+    .form-sub{color:var(--text-sub);font-size:0.9rem;margin-bottom:32px}
+    .form-sub a{color:var(--leaf);font-weight:500}
+    .form-group{margin-bottom:18px}
+    .form-label{font-size:0.8rem;font-weight:600;margin-bottom:6px;display:block;color:var(--text-sub)}
+    .form-input{width:100%;padding:12px 16px;background:var(--bg-2);border:1.5px solid var(--border);border-radius:var(--r-md);font-family:var(--font-body);font-size:0.9rem;color:var(--text);outline:none;transition:all var(--transition)}
+    .form-input:focus{border-color:var(--lime);background:var(--card-bg)}
+    .form-input::placeholder{color:var(--text-sub)}
+    .form-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .forgot-link{font-size:0.78rem;color:var(--leaf);cursor:pointer}
+    .form-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:var(--r-md);padding:10px 14px;font-size:0.82rem;color:#dc2626;margin-bottom:14px;display:none}
+    .form-error.show{display:block}
+    .form-success{background:rgba(116,198,157,0.1);border:1px solid rgba(116,198,157,0.3);border-radius:var(--r-md);padding:10px 14px;font-size:0.82rem;color:var(--leaf);margin-bottom:14px;display:none}
+    .form-success.show{display:block}
+    .submit-btn{width:100%;padding:14px;border-radius:var(--r-xl);background:var(--forest);color:white;font-family:var(--font-body);font-size:0.9rem;font-weight:600;border:none;cursor:pointer;transition:all var(--transition);margin-bottom:16px}
+    .submit-btn:hover{background:var(--leaf)}
+    .submit-btn:disabled{opacity:0.6;cursor:not-allowed}
+    .divider{display:flex;align-items:center;gap:12px;margin:20px 0;font-size:0.75rem;color:var(--text-sub)}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+    .social-btns{display:flex;gap:10px}
+    .social-btn{flex:1;padding:11px;border-radius:var(--r-md);border:1.5px solid var(--border);background:transparent;color:var(--text);font-family:var(--font-body);font-size:0.85rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+    .social-btn:hover{border-color:var(--lime)}
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <!-- LEFT VISUAL -->
+    <div class="auth-visual">
+      <div class="auth-visual-bg"></div>
+      <div class="auth-visual-content">
+        <div class="auth-visual-logo"><div class="logo-icon">🌿</div>FreshBite</div>
+        <p class="auth-visual-tagline">Healthy eating, simplified.</p>
+        <div class="visual-features">
+          <div class="visual-feature">
+            <div class="feature-check">✓</div>
+            <div class="feature-text"><strong>500+ healthy recipes</strong><br>All with full nutrition facts and easy filters.</div>
+          </div>
+          <div class="visual-feature">
+            <div class="feature-check">✓</div>
+            <div class="feature-text"><strong>Save & organize recipes</strong><br>Build your personal healthy recipe collection.</div>
+          </div>
+          <div class="visual-feature">
+            <div class="feature-check">✓</div>
+            <div class="feature-text"><strong>AI Recipe Generator</strong><br>Build custom recipes from any ingredients you have.</div>
+          </div>
+          <div class="visual-feature">
+            <div class="feature-check">✓</div>
+            <div class="feature-text"><strong>Download PDF guides</strong><br>Beautiful printable recipe cards for your kitchen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div class="auth-form-side">
+      <div class="auth-form-wrap">
+        <div class="auth-nav">
+          <a href="/" class="auth-logo"><div class="auth-logo-icon">🌿</div>FreshBite</a>
+          <button class="theme-toggle" id="themeToggle">🌙</button>
+        </div>
+
+        <h1 class="form-title">Welcome back</h1>
+        <p class="form-sub">Don't have an account? <a href="/auth/signup.html">Sign up free</a></p>
+
+        <div class="form-error" id="formError"></div>
+        <div class="form-success" id="formSuccess"></div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" id="emailInput" placeholder="you@email.com" />
+        </div>
+
+        <div class="form-group">
+          <div class="form-row">
+            <label class="form-label" style="margin:0">Password</label>
+            <span class="forgot-link" onclick="forgotPassword()">Forgot password?</span>
+          </div>
+          <input type="password" class="form-input" id="passwordInput" placeholder="••••••••" />
+        </div>
+
+        <button class="submit-btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
+
+        <div class="divider">or continue with</div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="googleLogin()">🔍 Google</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── PASTE YOUR SUPABASE KEYS HERE ───────────────────────────
+    const SUPABASE_URL = 'https://gfhsexkpzqlfwactwtbp.supabase.co'
+    const SUPABASE_ANON_KEY = 'sb_publishable_og6Zn6OGyV76L7D0Fs0pDg_Wbm-OkeE'
+    // ─────────────────────────────────────────────────────────────
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+    async function handleLogin() {
+      const email = document.getElementById('emailInput').value.trim()
+      const password = document.getElementById('passwordInput').value
+      const errorEl = document.getElementById('formError')
+      const successEl = document.getElementById('formSuccess')
+      const btn = document.getElementById('loginBtn')
+
+      errorEl.classList.remove('show')
+      successEl.classList.remove('show')
+
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Please enter a valid email address.'
+        errorEl.classList.add('show')
+        return
+      }
+      if (password.length < 6) {
+        errorEl.textContent = 'Password must be at least 6 characters.'
+        errorEl.classList.add('show')
+        return
+      }
+
+      btn.textContent = 'Signing in…'
+      btn.disabled = true
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+      if (error) {
+        errorEl.textContent = error.message
+        errorEl.classList.add('show')
+        btn.textContent = 'Sign In'
+        btn.disabled = false
+        return
+      }
+
+      // Save to localStorage for site-wide use
+      localStorage.setItem('fb_user', JSON.stringify({
+        name: data.user.user_metadata?.name || email.split('@')[0],
+        email: data.user.email,
+        id: data.user.id
+      }))
+
+      const redirect = new URLSearchParams(window.location.search).get('redirect') || '/'
+      window.location = redirect
+    }
+
+    async function forgotPassword() {
+      const email = document.getElementById('emailInput').value.trim()
+      const errorEl = document.getElementById('formError')
+      const successEl = document.getElementById('formSuccess')
+
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Enter your email address first, then click Forgot Password.'
+        errorEl.classList.add('show')
+        return
+      }
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/auth/login.html'
+      })
+
+      if (error) {
+        errorEl.textContent = error.message
+        errorEl.classList.add('show')
+      } else {
+        successEl.textContent = '✅ Password reset email sent! Check your inbox.'
+        successEl.classList.add('show')
+      }
+    }
+
+    async function googleLogin() {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin }
+      })
+    }
+
+    // Enter key support
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin()
+    })
+
+    // Dark mode
+    const html = document.documentElement
+    const saved = localStorage.getItem('fb_theme') || 'light'
+    html.setAttribute('data-theme', saved)
+    const tt = document.getElementById('themeToggle')
+    tt.textContent = saved === 'dark' ? '☀️' : '🌙'
+    tt.addEventListener('click', () => {
+      const n = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+      html.setAttribute('data-theme', n)
+      tt.textContent = n === 'dark' ? '☀️' : '🌙'
+      localStorage.setItem('fb_theme', n)
+    })
+
+    // Redirect if already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location = '/'
+    })
+  </script>
+</body>
+</html>

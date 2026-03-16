@@ -1,0 +1,72 @@
+[build]
+  publish = "public"
+  functions = "functions"
+  command = "echo 'No build step needed - static HTML site'"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# API Routes
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Clean URLs - remove .html extensions
+[[redirects]]
+  from = "/recipes"
+  to = "/recipes/"
+  status = 301
+
+[[redirects]]
+  from = "/blog"
+  to = "/blog/"
+  status = 301
+
+[[redirects]]
+  from = "/juice-builder"
+  to = "/juice-builder/"
+  status = 301
+
+# SPA-style fallback for recipe detail
+[[redirects]]
+  from = "/recipes/:id"
+  to = "/recipes/detail.html"
+  status = 200
+  query = {id = ":id"}
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# HTML pages - shorter cache
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+# Functions environment variables
+# Set these in the Netlify dashboard under Site Settings > Environment Variables:
+# ANTHROPIC_API_KEY = your_anthropic_api_key_here
